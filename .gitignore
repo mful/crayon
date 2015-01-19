@@ -1,0 +1,8 @@
+*\/\.
+*\.DS*
+
+/node_modules
+/_SpecRunner.html
+/build
+/.grunt
+/.sass-cache
