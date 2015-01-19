@@ -12,7 +12,7 @@ module.exports = function(grunt){
       },
 
       scripts: {
-        cwd 'scripts',
+        cwd: 'scripts',
         src: ['**/*.js'],
         dest: 'build/scripts',
         expand: true
@@ -22,6 +22,20 @@ module.exports = function(grunt){
         cwd: 'images',
         src: [ '*' ],
         dest: 'build/images',
+        expand: true
+      },
+
+      html: {
+        cwd: 'html',
+        src: ['*'],
+        dest: 'build/html',
+        expand: true
+      },
+
+      fonts: {
+        cwd: 'fonts',
+        src: ['*'],
+        dest: 'build/fonts',
         expand: true
       },
 
@@ -50,7 +64,7 @@ module.exports = function(grunt){
         files: [{
           expand: true,
           cwd: 'styles',
-          src: ['*.scss'],
+          src: ['scribble.scss'],
           dest: 'build/styles',
           ext: '.css'
         }]
@@ -68,7 +82,7 @@ module.exports = function(grunt){
     uglify: {
       build: {
         files: {
-          'build/scripts/scribble.js': [ 'build/scripts/**/*.js', '!build/scripts/background/**/*.js' ],
+          'build/scripts/scribble.js': [ 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/background/**/*.js' ],
           'build/scripts/background.js': [ 'build/scripts/background/**/*.js' ]
         }
       }
@@ -102,7 +116,7 @@ module.exports = function(grunt){
   grunt.registerTask(
     'build',
     'Compiles all of the assets and copies the files to the build directory.',
-    ['clean:build', 'stylesheets', 'scripts', 'copy:images', 'copy:manifest']
+    ['clean:build', 'stylesheets', 'scripts', 'copy:images', 'copy:html', 'copy:fonts', 'copy:manifest']
   );
 
   grunt.registerTask(

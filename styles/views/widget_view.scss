@@ -1,0 +1,44 @@
+#crayon-create-annotation.crayon-widget {
+  border: solid 1px #444;
+  border-bottom: none;
+  border-right: none;
+  bottom: 0;
+  cursor: pointer;
+  height: 50px;
+  font-family: $default_serif_italic;
+  position: fixed;
+  right: 0;
+  width: 300px;
+  z-index: 999999;
+
+  .header {
+    background: $purple;
+    color: $white;
+    padding: 5px 10px;
+
+    .title {
+      display: inline-block;
+      font-size: $size3;
+      line-height: 40px;
+      margin-left: 14px;
+      vertical-align: top;
+    }
+  }
+
+  .caret-wrapper {
+    border-right: solid $grey 1px;
+    display: inline-block;
+    height: 40px;
+    padding: 15px 19px 15px 10px;
+  }
+
+  .caret-up {
+    border-left: solid 3px $white;
+    border-top: solid 3px $white;
+    border-radius: 2px;
+    float: left;
+    height: 19px;
+    transform: rotate(45deg);
+    width: 19px;
+  }
+}
