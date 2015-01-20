@@ -14,13 +14,19 @@ crayon.observers.HighlightObserver = ( function () {
   };
 
   HighlightObserver.prototype.highlight = function () {
-    var selection = this.getSelection();
+    var _this = this;
 
-    if ( selection ) {
-      return this.notifyNewAnnotation( selection );
-    } else {
-      return this.notifyClearHighlight();
-    }
+    // defer to handle case where user clicks the highlighted area, taking an
+    // extra event cycle to clear the window selection
+    setTimeout( function () {
+      var selection = _this.getSelection();
+
+      if ( selection ) {
+        return _this.notifyNewAnnotation( selection );
+      } else {
+        return _this.notifyClearHighlight();
+      }
+    }, 0 )
   };
 
   HighlightObserver.prototype.getSelection = function () {

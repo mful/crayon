@@ -89,10 +89,10 @@ module.exports = function(grunt){
     },
 
     jasmine : {
-      src : ['build/scripts/**/*.js'],
+      src : ['build/scripts/scribble.js'],
       options: {
         specs : 'spec/**/*spec.js',
-        helpers: 'spec/helpers/*.js',
+        helpers: 'spec/support/helpers/*.js',
         keepRunner: true
       }
     },
@@ -122,7 +122,7 @@ module.exports = function(grunt){
   grunt.registerTask(
     'spec',
     'Run Jasmine tests.',
-    ['copy:vendorScripts', 'copy:scripts', 'jasmine']
+    ['scripts', 'jasmine']
   );
 
   grunt.registerTask('default', []);

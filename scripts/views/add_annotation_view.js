@@ -1,22 +1,22 @@
 crayon.view || ( crayon.views = {} )
 
-crayon.views.WidgetView = ( function () {
+crayon.views.AddAnnotationView = ( function () {
 
-  WidgetView.prototype.id = 'crayon-create-annotation';
-  WidgetView.prototype.className = 'crayon-widget';
+  AddAnnotationView.prototype.id = 'crayon-create-annotation';
+  AddAnnotationView.prototype.className = 'crayon-widget hidden';
 
-  function WidgetView () {
+  function AddAnnotationView () {
     this.render = this.render.bind( this );
     this.element = this._template();
     this.delegateEvents();
   };
 
-  WidgetView.prototype.delegateEvents = function () {
+  AddAnnotationView.prototype.delegateEvents = function () {
     // stub
     return this
   };
 
-  WidgetView.prototype.render = function ( model ) {
+  AddAnnotationView.prototype.render = function ( model ) {
     this.model = model;
 
     if ( !document.getElementById( this.id ) )
@@ -26,15 +26,15 @@ crayon.views.WidgetView = ( function () {
     return this;
   };
 
-  WidgetView.prototype.show = function() {
-    this.element.style.display = 'block';
+  AddAnnotationView.prototype.show = function() {
+    return crayon.helpers.utility.removeClass( this.element, 'hidden' );
   };
 
-  WidgetView.prototype.hide = function() {
-    this.element.style.display = 'none';
+  AddAnnotationView.prototype.hide = function() {
+    return crayon.helpers.utility.addClass( this.element, 'hidden' );
   };
 
-  WidgetView.prototype._template = function() {
+  AddAnnotationView.prototype._template = function() {
     var container, contents;
 
     contents = "<div class='header'><div class='caret-wrapper'><div class='caret-up'></div></div><div class='title'>Add Annotation</div></div><div class='iframe-wrapper'></div>";
@@ -46,6 +46,6 @@ crayon.views.WidgetView = ( function () {
     return container;
   };
 
-  return WidgetView;
+  return AddAnnotationView;
 
 })();

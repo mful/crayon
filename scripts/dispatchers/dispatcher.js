@@ -18,9 +18,8 @@ crayon.dispatchers.Dispatcher = ( function () {
     return true;
   };
 
-  // check if the annotation form is open. If so, ignore, else hide the widget
   Dispatcher.prototype.maybeClearHighlight = function () {
-    // stub
+    return crayon.windowManager.maybeHideWidget();
   };
 
   Dispatcher.prototype.newAnnotation = function ( selection ) {

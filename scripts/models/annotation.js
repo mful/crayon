@@ -5,13 +5,14 @@ crayon.models || ( crayon.models = {} );
 crayon.models.Annotation = ( function () {
 
   Annotation.prototype.attributes = {
-    text: null
+    text: null,
+    url: null
   };
 
   function Annotation ( selection ) {
     this.toQueryStr = this.toQueryStr.bind( this );
-    this.newUrl = this.newUrl( this );
     this.attributes.text = this.parseText( selection );
+    this.attributes.url = crayon.helpers.url.currentHref();
   }
 
   Annotation.prototype.parseText = function ( selection ) {
@@ -26,26 +27,8 @@ crayon.models.Annotation = ( function () {
     return text.trim();
   };
 
-  Annotation.prototype.newUrl = function () {
-    return crayon.baseDomain + ( "/annotations/new?" + ( this.toQueryStr() ));
-  };
-
   Annotation.prototype.toQueryStr = function () {
-    var prop, propStrs, val, _ref;
-    propStrs = [];
-    _ref = this.attributes;
-
-    for ( prop in _ref ) {
-      val = _ref[prop];
-      propStrs.push( "" + encodeURIComponent( prop ) + "=" + encodeURIComponent( val ));
-    }
-    propStrs.push( "url=" + ( encodeURIComponent( this.getLocation() )));
-
-    return propStrs.join( '&' );
-  };
-
-  Annotation.prototype.getLocation = function () {
-    return window.location.href;
+    return crayon.helpers.url.toQueryStr( this.attributes )
   };
 
   return Annotation;
