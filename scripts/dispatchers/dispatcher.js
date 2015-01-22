@@ -13,9 +13,17 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.UserActionConstants.CLEAR_HIGHLIGHT:
         _this.maybeClearHighlight();
         break;
+      case crayon.constants.AnnotationConstants.ADD_ANNOTATION:
+        _this.addAnnotation( payload.data );
+        break;
     }
 
     return true;
+  };
+
+  Dispatcher.prototype.addAnnotation = function ( annotation ) {
+    var textView = new crayon.views.AnnotatedTextView( annotation );
+    return textView.render();
   };
 
   Dispatcher.prototype.maybeClearHighlight = function () {

@@ -1,4 +1,4 @@
-crayon.view || ( crayon.views = {} )
+crayon.views || ( crayon.views = {} )
 
 crayon.views.AddAnnotationView = ( function () {
 
@@ -7,13 +7,14 @@ crayon.views.AddAnnotationView = ( function () {
 
   function AddAnnotationView () {
     this.render = this.render.bind( this );
+    this.notifyAddAnnotation = this.notifyAddAnnotation.bind( this );
     this.element = this._template();
     this.delegateEvents();
   };
 
   AddAnnotationView.prototype.delegateEvents = function () {
-    // stub
-    return this
+    ev( this.element ).on( 'click', this.notifyAddAnnotation );
+    return this;
   };
 
   AddAnnotationView.prototype.render = function ( model ) {
@@ -46,6 +47,15 @@ crayon.views.AddAnnotationView = ( function () {
     container.innerHTML = contents;
 
     return container;
+  };
+
+  // event handlers
+
+  AddAnnotationView.prototype.notifyAddAnnotation = function () {
+    return crayon.dispatcher.dispatch({
+      message: crayon.constants.AnnotationConstants.ADD_ANNOTATION,
+      data: this.model
+    });
   };
 
   return AddAnnotationView;

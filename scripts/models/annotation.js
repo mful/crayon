@@ -14,7 +14,7 @@ crayon.models.Annotation = ( function () {
     this.toQueryStr = this.toQueryStr.bind( this );
     this.attributes.text = this.parseText( selection );
     this.attributes.url = crayon.helpers.url.currentHref();
-  }
+  };
 
   Annotation.prototype.parseText = function ( selection ) {
     var nodeSentences, selectedSentences, annotationSentences, selectedRegex,
@@ -24,8 +24,8 @@ crayon.models.Annotation = ( function () {
 
     selectedSentences = crayon.helpers.utility.separateSentences( selection.toString() );
     this._pruneSentences( selectedSentences );
-    selectedNode = crayon.helpers.selection.getSelectedParentNode( selection );
-    nodeSentences = crayon.helpers.utility.separateSentences( selectedNode.textContent );
+    this.selectedNode = crayon.helpers.selection.getSelectedParentNode( selection );
+    nodeSentences = crayon.helpers.utility.separateSentences( this.selectedNode.textContent );
     annotationSentences = this._assembleAnnotationSentences( selectedSentences, nodeSentences );
 
     return annotationSentences.join('').trim();

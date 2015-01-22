@@ -11,6 +11,13 @@ crayon.helpers.utility = {
     return element;
   },
 
+  // NOTE: remove if underscore.js ends up added
+  find: function ( list, testerFunc ) {
+    for ( var i = 0; i < list.length; i++ ) {
+      if ( testerFunc(list[i]) ) return list[i];
+    }
+  },
+
   isBlank: function ( string ) {
     return !string || /^\s*$/.test( string );
   },
