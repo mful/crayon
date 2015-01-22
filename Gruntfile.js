@@ -3,11 +3,18 @@ module.exports = function(grunt){
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
+    concat: {
+      scripts: {
+        src: ['build/scripts/vendor/**/*.js', 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/background/**/*.js'],
+        dest: 'build/scripts/scribble.js'
+      }
+    },
+
     copy: {
       vendorScripts: {
         cwd: 'vendor',
         src: [ '**/*.js' ],
-        dest: 'build/scripts',
+        dest: 'build/scripts/vendor',
         expand: true
       },
 
@@ -114,9 +121,21 @@ module.exports = function(grunt){
   );
 
   grunt.registerTask(
+    'devScripts',
+    'Concats JS files together',
+    ['copy:vendorScripts', 'copy:scripts', 'concat:scripts', 'clean:scripts']
+  );
+
+  grunt.registerTask(
     'build',
     'Compiles all of the assets and copies the files to the build directory.',
     ['clean:build', 'stylesheets', 'scripts', 'copy:images', 'copy:html', 'copy:fonts', 'copy:manifest']
+  );
+
+  grunt.registerTask(
+    'devBuild',
+    'Compiles all of the assets and copies the files to the build directory, without minifying',
+    ['clean:build', 'stylesheets', 'devScripts', 'copy:images', 'copy:html', 'copy:fonts', 'copy:manifest']
   );
 
   grunt.registerTask(
