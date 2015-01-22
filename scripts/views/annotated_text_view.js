@@ -8,25 +8,22 @@ crayon.views.AnnotatedTextView = ( function () {
   };
 
   AnnotatedTextView.prototype.render = function () {
-    var elements, containingNode, matchRegex, node;
+    var elements, containingNode, matchRegex, node, i;
     if ( this.rendered ) return this;
 
     elements = this.findAnnotationElements();
 
-    if ( elements.length === 1 ) {
-      matchRegex = new RegExp( crayon.helpers.utility.regexEscape(elements[0].matchStr) );
+    for ( i = 0; i < elements.length; i++ ) {
+      matchRegex = new RegExp( crayon.helpers.utility.regexEscape(elements[i].matchStr) );
       containingNode = crayon.helpers.utility.find(
-        elements[0].element.childNodes,
+        elements[i].element.childNodes,
         function ( node ) {
-          return !!node.nodeValue && !!node.nodeValue.match( matchRegex )
+          return !!node.nodeValue && !!node.nodeValue.match( matchRegex );
         }
       );
 
-      newNode = this._createModifiedNode( containingNode, elements[0].matchStr );
-
-      elements[0].element.replaceChild( newNode, containingNode );
-    } else {
-
+      newNode = this._createModifiedNode( containingNode, elements[i].matchStr );
+      elements[i].element.replaceChild( newNode, containingNode );
     }
 
     this.rendered = true;
@@ -51,7 +48,10 @@ crayon.views.AnnotatedTextView = ( function () {
         rawResults = this._getDOMNodesFromText( sentences[i] );
         switch ( rawResults.snapshotLength ) {
           case 1:
-            // sentResults[i] = rawResults.snapshotItem( 0 );
+            results.push({
+              element: rawResults.snapshotItem(0),
+              matchStr: sentences[i].trim()
+            });
             break;
           case 0:
             // check by word
@@ -63,6 +63,7 @@ crayon.views.AnnotatedTextView = ( function () {
       }
     } else {
 
+      // TODO: handle multiples -- need more views. Extract to lib?
       for ( j = 0; j < rawResults.snapshotLength; j++ ) {
         results.push(
           {
@@ -84,7 +85,7 @@ crayon.views.AnnotatedTextView = ( function () {
 
     return(
       document.evaluate(
-        '//*[contains(text(), "' + text + '")]',
+        '//*[contains(text(), "' + text.trim() + '")]',
         parentNode,
         null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null
       )
@@ -96,7 +97,7 @@ crayon.views.AnnotatedTextView = ( function () {
         frag = document.createDocumentFragment();
 
     div.innerHTML = node.nodeValue.replace(
-      new RegExp( matchStr ),
+      new RegExp( crayon.helpers.utility.regexEscape(matchStr) ),
       '<span class="crayon-annotation-text-view">$&</span>'
     );
 
