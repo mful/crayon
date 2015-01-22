@@ -15,10 +15,25 @@ crayon.helpers.utility = {
     return !string || /^\s*$/.test( string );
   },
 
+  isContained: function ( parent, child ) {
+    var childRegex;
+    childRegex = new RegExp( crayon.helpers.utility.regexEscape(child.trim()) );
+
+    return !!parent.trim().match( childRegex );
+  },
+
+  regexEscape: function ( string ) {
+    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  },
+
   removeClass: function ( element, cssClass ) {
     var regex = new RegExp( '(?:^|\\s)' + cssClass + '(?!\\S)' );
     element.className = element.className.replace( regex, '' );
 
     return element;
-  }
+  },
+
+  separateSentences: function ( text ) {
+    return text.replace(/(([.?!]\s+)|((?![.?!])[\f\n\r\v]\s*))(?=[A-Z\d\$\(])/g, "$1>|<").split(">|<");
+  },
 };

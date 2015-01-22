@@ -6,9 +6,7 @@ describe( 'crayon.views.AddAnnotationView', function () {
       rangeCount: 1,
       getRangeAt: function ( i ){
         return {
-          cloneContents: function () {
-            return { textContent: 'The wizard prison Azkeban.' };
-          }
+          commonAncestorContainer: { textContent: ' We are not descended from fearful men.   ' }
         }
       }
     }

@@ -40,10 +40,8 @@ describe( 'crayon.coordinators.WindowManager', function () {
         rangeCount: 1,
         getRangeAt: function ( i ){
           return {
-            cloneContents: function () {
-              return { textContent: ' We are not descended from fearful men.   ' };
-            }
-          }
+            commonAncestorContainer: { textContent: ' We are not descended from fearful men.   ' }
+          };
         }
       });
     });

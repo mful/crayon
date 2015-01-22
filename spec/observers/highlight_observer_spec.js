@@ -41,6 +41,11 @@ describe( 'crayon.observers.HighlightObserver', function () {
         spyOn( this.selection, 'getRangeAt' ).and.returnValue( this.range );
       });
 
+      it( 'should return null when the selection is collapsed', function () {
+        this.selection.isCollapsed = true;
+        expect( this.observer.getSelection() );
+      });
+
       it( 'should return the selection with a non-blank selection', function () {
         spyOn( this.range, 'cloneContents' ).and.returnValue({ textContent: 'test' });
         expect( this.observer.getSelection() ).toEqual( this.selection );

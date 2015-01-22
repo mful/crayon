@@ -1,4 +1,4 @@
-#crayon-create-annotation.crayon-widget {
+.crayon-add-annotation-view.crayon-widget {
   border: solid 1px #444;
   border-bottom: none;
   border-right: none;
@@ -11,12 +11,12 @@
   width: 300px;
   z-index: 999999;
 
-  .header {
+  .crayon-header {
     background: $purple;
     color: $white;
     padding: 5px 10px;
 
-    .title {
+    .crayon-title {
       display: inline-block;
       font-size: $size3;
       line-height: 40px;
@@ -25,14 +25,14 @@
     }
   }
 
-  .caret-wrapper {
+  .crayon-caret-wrapper {
     border-right: solid $grey 1px;
     display: inline-block;
-    height: 40px;
+    height: 10px;
     padding: 15px 19px 15px 10px;
   }
 
-  .caret-up {
+  .crayon-caret-up {
     border-left: solid 3px $white;
     border-top: solid 3px $white;
     border-radius: 2px;

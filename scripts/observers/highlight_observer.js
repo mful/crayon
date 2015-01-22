@@ -31,6 +31,7 @@ crayon.observers.HighlightObserver = ( function () {
 
   HighlightObserver.prototype.getSelection = function () {
     var blank, sel = window.getSelection();
+    if ( sel.isCollapsed ) return null;
 
     if ( sel.rangeCount > 1 ) {
       return sel;
