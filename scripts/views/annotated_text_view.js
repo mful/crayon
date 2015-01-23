@@ -11,20 +11,10 @@ crayon.views.AnnotatedTextView = ( function () {
     var elements, containingNode, matchRegex, node, i;
     if ( this.rendered ) return this;
 
-    elements = this.findAnnotationElements2();
+    elements = this.findAnnotationElements();
 
     for ( i = 0; i < elements.length; i++ ) {
-      matchRegex = new RegExp( crayon.helpers.utility.regexEscape(elements[i].matchStr.trim()) );
-      // containingNode = crayon.helpers.utility.find(
-      //   elements[i].element.childNodes,
-      //   function ( node ) {
-      //     return !!node.nodeValue && !!node.nodeValue.match( matchRegex );
-      //   }
-      // );
-
-      // newNode = this._createModifiedNode( containingNode, elements[i].matchStr.replace(/\s+$/, '') );
       newNode = this._createModifiedNode( elements[i].element, elements[i].matchStr.trim() );
-
       elements[i].element.parentElement.replaceChild( newNode, elements[i].element );
     }
 
@@ -33,104 +23,20 @@ crayon.views.AnnotatedTextView = ( function () {
     return this;
   };
 
-  // AnnotatedTextView.prototype.findAnnotationElements = function () {
-  //   var results, sentences, i, j, parentNode, sentResults, rawResults, testText;
-  //   parentNode = this.model.selectedNode ? this.model.selectedNode : document.body;
-  //   results = [];
+  AnnotatedTextView.prototype.findAnnotationElements = function () {
+    var results, sentences, i, j, parentNode, rawResults, testText;
 
-  //   // first try by full text
-  //   rawResults = this._getDOMNodesFromText( this.model.attributes.text, parentNode );
-
-  //   if ( rawResults.snapshotLength < 1 ) {
-  //     // next try by full sentences
-  //     sentences = crayon.helpers.utility.separateSentences( this.model.attributes.text );
-  //     sentResults = [];
-
-  //     for ( i = 0; i < sentences.length; i++ ) {
-  //       this._appendResult( results, sentences[i], parentNode );
-  //     }
-  //   } else {
-
-  //     // TODO: handle multiples -- need more views. Extract to lib?
-  //     for ( j = 0; j < rawResults.snapshotLength; j++ ) {
-  //       results.push(
-  //         {
-  //           element: rawResults.snapshotItem( j ),
-  //           matchStr: this.model.attributes.text
-  //         }
-  //       );
-  //     }
-
-  //   }
-
-  //   return results;
-  // };
-
-  AnnotatedTextView.prototype.findAnnotationElements2 = function () {
-    var results, sentences, i, j, parentNode, sentResults, rawResults, testText;
     parentNode = this.model.selectedNode ? this.model.selectedNode : document.body;
     results = [];
 
-    // first try by full text
-    rawResults = this._getDOMNodesFromText2( this.model.attributes.text, parentNode );
-
-    if ( rawResults.length < 1 ) {
-      // next try by full sentences
-      sentences = crayon.helpers.utility.separateSentences( this.model.attributes.text );
-      sentResults = [];
-
-      for ( i = 0; i < sentences.length; i++ ) {
-        this._appendResult2( results, sentences[i], parentNode );
-      }
-    } else {
-
-      // TODO: handle multiples -- need more views. Extract to lib?
-      for ( j = 0; j < rawResults.length; j++ ) {
-        results.push(
-          {
-            element: rawResults[j],
-            matchStr: this.model.attributes.text
-          }
-        );
-      }
-
-    }
-
-    return results;
+    return this._appendResult( results, this.model.attributes.text, parentNode );
   };
 
   // private
 
-  // AnnotatedTextView.prototype._appendResult = function ( results, testText, parentNode, leftovers ) {
-  //   if ( !leftovers ) leftovers = [];
-  //   var rawResults = this._getDOMNodesFromText( testText, parentNode );
-
-  //   switch ( rawResults.snapshotLength ) {
-  //     case 1:
-  //       results.push({
-  //         element: rawResults.snapshotItem(0),
-  //         matchStr: testText.trim()
-  //       });
-
-  //       if ( leftovers.length > 0 )
-  //         return this._appendResult( results, leftovers.join(''), parentNode );
-
-  //       break;
-  //     case 0:
-  //       leftovers.unshift( testText.match(/\s\S*\s?$/)[0] );
-  //       testText = testText.trim().replace( /\s\S*$/, '' );
-  //       return this._appendResult( results, testText, parentNode, leftovers );
-  //     default:
-  //       // find all that are adjacent to the rest of the annotated text?
-  //       break;
-  //   }
-
-  //   return results;
-  // };
-
-  AnnotatedTextView.prototype._appendResult2 = function ( results, testText, parentNode, leftovers ) {
+  AnnotatedTextView.prototype._appendResult = function ( results, testText, parentNode, leftovers ) {
     if ( !leftovers ) leftovers = [];
-    var rawResults = this._getDOMNodesFromText2( testText, parentNode );
+    var rawResults = this._getDOMNodesFromText( testText, parentNode );
 
     switch ( rawResults.length ) {
       case 1:
@@ -140,49 +46,67 @@ crayon.views.AnnotatedTextView = ( function () {
         });
 
         if ( leftovers.length > 0 )
-          return this._appendResult2( results, leftovers.join(''), parentNode );
+          return this._appendResult( results, leftovers.join(''), parentNode );
 
         break;
       case 0:
-        leftovers.unshift( testText.match(/\s\S*\s?$/)[0] );
-        testText = testText.trim().replace( /\s\S*$/, '' );
-        return this._appendResult2( results, testText, parentNode, leftovers );
+        leftovers.unshift( testText.match(/\s\S+\s*$/)[0] );
+        testText = testText.trim().replace( /\s\S+$/, '' );
+        return this._appendResult( results, testText, parentNode, leftovers );
       default:
         // find all that are adjacent to the rest of the annotated text?
         console.log( 'MORE THAN ONE NODE' );
+
+        if ( results.length > 0 ) {
+          // CAN WE SIMPLY CHECK IF THE SNIPPET IN QUESTION OCCURS AT THE END
+          // OR BEGINNING OF THE RESULT NODE, DEPENDING ON CONTEXT???
+
+          // check if any of the rawRes.parentElements contain, are contained
+          // by, are siblings of, are the same as the last result parent
+          // element
+          for ( var i = 0; i < rawResults.length; i++ ) {
+            candidateParent = rawResults[i].parentElement;
+            resultParent = results[results.length - 1].parentElement;
+            if ( /* parents are equal and cand is next sibling of res */ ) {
+              // add to results, and continue recursion
+            } else if ( /* candP is next sibling of resP */ ) {
+              // get first common parent, and check text match
+              // if matched, add to results, and continue recursion
+            } else if ( /* resP is the parent of candP */ ) {
+              // check resP text content
+              // or check if res node's next sibling is candP?
+              // if matched, add to results, and continue recursion
+            } else if ( /* candP is the parent of resP */ ) {
+              // check candP text content
+              // or check if cand node's next sibling is resP?
+              // if matched, add to results, and continue recursion
+            } else {
+              // do nothing -- continue this loop
+            }
+          }
+        } else {
+          // go up parent levels, and loop over testText + increasing leftovers
+          // until all text is matched? Need to avoid reaching common parents of
+          // raw results.
+
+          // handle case where the are multiple of the same full annotation, on
+          // the same page
+        }
+
         break;
     }
 
     return results;
   };
 
-  // AnnotatedTextView.prototype._getDOMNodesFromText = function ( text, parentNode ) {
-  //   if ( !parentNode ) parentNode = document.body;
-
-  //   return(
-  //     document.evaluate(
-  //       "//*[contains(translate(text(), \"'’\", ''), '" + text.trim().replace(/['’]/g, '') + "')]",
-  //       parentNode,
-  //       null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null
-  //     )
-  //   );
-  // };
-
-  AnnotatedTextView.prototype._getDOMNodesFromText2 = function ( text, parentNode ) {
-    var matchRegex = new RegExp( crayon.helpers.utility.regexEscape(text.trim()) ),
-        results = [],
-        i;
-
-    if ( !this.nodes ) {
-      this.nodes = [];
-      crayon.helpers.dom.getBaseNodes( parentNode, this.nodes );
-    }
-
-    for ( i = 0; i < this.nodes.length; i++ ) {
-      if ( !!this.nodes[i].textContent.match(matchRegex) ) results.push( this.nodes[i] );
-    }
-
-    return results;
+  AnnotatedTextView.prototype._areElementsRelated = function ( predecessor, candidate ) {
+    return(
+      predecessor === candidate ||
+      predecessor.nextSibling === candidate ||
+      // these two then require some text checking
+      crayon.helpers.utilty.includes( candidate.childNodes, predecessor ) ||
+      crayon.helpers.utilty.includes( predecessor.childNodes, candidate )
+    )
   };
 
   AnnotatedTextView.prototype._createModifiedNode = function ( node, matchStr ) {
@@ -199,6 +123,23 @@ crayon.views.AnnotatedTextView = ( function () {
     }
 
     return frag;
+  };
+
+  AnnotatedTextView.prototype._getDOMNodesFromText = function ( text, parentNode ) {
+    var matchRegex = crayon.helpers.utility.escapedRegex( text.trim() ),
+        results = [],
+        i;
+
+    if ( !this.nodes ) {
+      this.nodes = [];
+      crayon.helpers.dom.getBaseNodes( parentNode, this.nodes );
+    }
+
+    for ( i = 0; i < this.nodes.length; i++ ) {
+      if ( !!this.nodes[i].textContent.match(matchRegex) ) results.push( this.nodes[i] );
+    }
+
+    return results;
   };
 
   return AnnotatedTextView;
