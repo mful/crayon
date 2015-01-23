@@ -190,7 +190,7 @@ crayon.views.AnnotatedTextView = ( function () {
         frag = document.createDocumentFragment();
 
     div.innerHTML = node.nodeValue.replace(
-      new RegExp( crayon.helpers.utility.regexEscape(matchStr) ),
+      crayon.helpers.utility.escapedRegex( matchStr.trim() ),
       '<span class="crayon-annotation-text-view">$&</span>'
     );
 

@@ -11,6 +11,10 @@ crayon.helpers.utility = {
     return element;
   },
 
+  escapedRegex: function ( string ) {
+    return new RegExp( crayon.helpers.utility.regexEscape(string) );
+  },
+
   // NOTE: remove if underscore.js ends up added
   find: function ( list, testerFunc ) {
     for ( var i = 0; i < list.length; i++ ) {
@@ -24,7 +28,7 @@ crayon.helpers.utility = {
 
   isContained: function ( parent, child ) {
     var childRegex;
-    childRegex = new RegExp( crayon.helpers.utility.regexEscape(child.trim()) );
+    childRegex = crayon.helpers.utility.escapedRegex( child.trim() );
 
     return !!parent.trim().match( childRegex );
   },
@@ -42,5 +46,5 @@ crayon.helpers.utility = {
 
   separateSentences: function ( text ) {
     return text.replace(/(([.?!]\s+)|((?![.?!])[\f\n\r\v]\s*))(?=[A-Z\d\$\(])/g, "$1>|<").split(">|<");
-  },
+  }
 };
