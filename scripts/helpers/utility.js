@@ -16,6 +16,17 @@ crayon.helpers.utility = {
   },
 
   // NOTE: remove if underscore.js ends up added
+  filter: function ( list, func ) {
+    var results = [], i;
+
+    for ( i = 0; i < list.length; i++ ) {
+      if ( func(list[i]) ) results.push( list[i] );
+    }
+
+    return results;
+  },
+
+  // NOTE: remove if underscore.js ends up added
   find: function ( list, testerFunc ) {
     for ( var i = 0; i < list.length; i++ ) {
       if ( testerFunc(list[i]) ) return list[i];
@@ -31,6 +42,16 @@ crayon.helpers.utility = {
     childRegex = crayon.helpers.utility.escapedRegex( child.trim() );
 
     return !!parent.trim().match( childRegex );
+  },
+
+  parents: function (node) {
+    var nodes = [];
+
+    for ( ; node; node = node.parentNode ) {
+      nodes.unshift( node );
+    }
+
+    return nodes;
   },
 
   regexEscape: function ( string ) {
