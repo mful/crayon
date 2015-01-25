@@ -2,12 +2,12 @@ crayon.helpers || ( crayon.helpers = {} )
 
 crayon.helpers.dom = {
 
-  getBaseNodes: function ( el, nodes ) {
-    el.hasChildNodes() ? el.normalize() : nodes.push( el );
+  getBaseTextNodes: function ( el, nodes ) {
+    !el.hasChildNodes() && el.nodeType === 3 ? nodes.push( el ) : el.normalize();
     var children = el.childNodes;
 
     for( var i = 0; i < children.length; i++ ) {
-      crayon.helpers.dom.getBaseNodes( children[i], nodes );
+      crayon.helpers.dom.getBaseTextNodes( children[i], nodes );
     }
   }
 }
