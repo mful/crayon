@@ -101,7 +101,7 @@ describe( 'crayon.models.Annotation', function () {
   });
 
   describe( '#toQueryStr', function() {
-    it( 'should serialize the annotation and page url', function () {
+    it( 'should serialize the annotation text and page url', function () {
       expect( this.annotation.toQueryStr() ).toEqual( 'text=We%20are%20not%20descended%20from%20fearful%20men.&url=https%3A%2F%2Fhogwarts.com' )
     })
   });

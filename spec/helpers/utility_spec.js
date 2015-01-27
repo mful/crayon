@@ -1,4 +1,4 @@
-describe( 'this.helper', function () {
+describe( 'crayon.helpers.utility', function () {
 
   beforeEach( function () {
     this.helper = crayon.helpers.utility;
@@ -34,6 +34,91 @@ describe( 'this.helper', function () {
         expect( this.element.className ).toEqual( this.originalClassName + ' magic-class' );
       });
     })
+  });
+
+  describe( '#compact', function () {
+
+    describe( 'when the list contains no null or undefined elements', function () {
+      it( 'should return the given list', function () {
+        var list = [1 ,'test', 3];
+        expect( this.helper.compact(list) ).toEqual( list );
+      });
+    });
+
+    describe( 'when the list contains some null and undefined elements', function () {
+      it( 'should return the given list minus any null or undefined elements', function () {
+        var list = [undefined, 1 ,'test', null, 3];
+        expect( this.helper.compact(list) ).toEqual( [1, 'test', 3] );
+      });
+    });
+
+    describe( 'when the list contains ALL null and undefined elements', function () {
+      it( 'should return an empty array', function () {
+        var list = [undefined, null];
+        expect( this.helper.compact(list) ).toEqual( [] );
+      });
+    });
+
+    describe( 'when given an empty list', function () {
+      it( 'should return an empty array', function () {
+        var list = [];
+        expect( this.helper.compact(list) ).toEqual( [] );
+      });
+    });
+  });
+
+  describe( '#escapedRegex', function () {
+    it( 'should a regex for the given text, with all special chars escaped', function () {
+      var text = "This is-/(the)\\ story of a ^$*girl +?.|[]{}";
+      var expectedResult = /This is\-\/\(the\)\\ story of a \^\$\*girl \+\?\.\|\[\]\{\}/;
+      expect( this.helper.escapedRegex(text) ).toEqual( expectedResult );
+    });
+  });
+
+  describe( '#filter', function () {
+
+    beforeEach( function () {
+      this.list = [{name: 'Hagrid'}, {name: 'Harry'}, {name: 'Minerva'}, {}];
+      this.results = this.helper.filter( this.list, function ( item ) {
+        return item.name && !!item.name[0].match( /[hH]/ );
+      });
+    });
+
+    it( 'should return only the expected objects', function () {
+      expect( this.results ).toEqual( this.list.slice(0, 2) );
+    });
+  });
+
+  describe( '#find', function () {
+    beforeEach( function () {
+      this.list = [{name: 'Minerva'}, {name: 'Hagrid'}, {name: 'Harry'}, {}];
+      this.result = this.helper.find( this.list, function ( item ) {
+        return item.name && !!item.name[0].match( /[hH]/ );
+      });
+    });
+
+    it( 'should return the first matched object', function () {
+      expect( this.result ).toEqual( this.list[1] );
+    });
+  });
+
+  describe( '#includes', function () {
+
+    describe( 'when the list includes the candidate', function () {
+      var list = [1,2,3];
+
+      it( 'should return true', function () {
+        expect( this.helper.includes(list, 2) ).toEqual( true );
+      });
+    });
+
+    describe( 'then the list does not include the candidate', function () {
+      var list = [1,2,3];
+
+      it( 'should return true', function () {
+        expect( this.helper.includes(list, 4) ).toEqual( false );
+      });
+    });
   });
 
   describe( '#isBlank', function () {
@@ -123,13 +208,13 @@ describe( 'this.helper', function () {
   });
 
   describe( '#separateSentences', function () {
-    var text = "Harry Potter and the Sorcerer's Stone\vBy JK Rowling\fChapter 2.4:\nThe Boy Who Lived\r1 day, long ago?    Another test! $5 we go. (Well well well) this is interesting.";
+    var text = "Harry Potter and the Sorcerer's Stone\vBy JK Rowling\fChapter 2.4:\nThe Boy Who Lived\r\"1 day, long ago?\"    Another test! $5 we go. (Well well well) this is interesting.";
     var expectedResult = [
       "Harry Potter and the Sorcerer's Stone\v",
       "By JK Rowling\f",
       "Chapter 2.4:\n",
       "The Boy Who Lived\r",
-      "1 day, long ago?    ",
+      "\"1 day, long ago?\"    ",
       "Another test! ",
       "$5 we go. ",
       "(Well well well) this is interesting."

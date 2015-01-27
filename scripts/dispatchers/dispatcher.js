@@ -22,8 +22,8 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.addAnnotation = function ( annotation ) {
-    var textView = new crayon.views.AnnotatedTextView( annotation );
-    return textView.render();
+    var injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
+    return injector.inject();
   };
 
   Dispatcher.prototype.maybeClearHighlight = function () {

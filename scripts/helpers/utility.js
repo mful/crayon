@@ -11,6 +11,17 @@ crayon.helpers.utility = {
     return element;
   },
 
+  compact: function ( list ) {
+    var results = [], i;
+
+    for ( i = 0; i < list.length; i++ ) {
+      if ( list[i] !== null && list[i] !== undefined )
+        results.push( list[i] );
+    }
+
+    return results;
+  },
+
   escapedRegex: function ( string ) {
     return new RegExp( crayon.helpers.utility.regexEscape(string) );
   },
@@ -33,6 +44,14 @@ crayon.helpers.utility = {
     }
   },
 
+  includes: function ( list, candidate ) {
+    for ( var i = 0; i < list.length; i++ ) {
+      if ( list[i] === candidate ) return true;
+    }
+
+    return false;
+  },
+
   isBlank: function ( string ) {
     return !string || /^\s*$/.test( string );
   },
@@ -42,16 +61,6 @@ crayon.helpers.utility = {
     childRegex = crayon.helpers.utility.escapedRegex( child.trim() );
 
     return !!parent.trim().match( childRegex );
-  },
-
-  parents: function (node) {
-    var nodes = [];
-
-    for ( ; node; node = node.parentNode ) {
-      nodes.unshift( node );
-    }
-
-    return nodes;
   },
 
   regexEscape: function ( string ) {
@@ -66,6 +75,6 @@ crayon.helpers.utility = {
   },
 
   separateSentences: function ( text ) {
-    return text.replace(/(([.?!]\s+)|((?![.?!])[\f\n\r\v]\s*))(?=[A-Z\d\$\(])/g, "$1>|<").split(">|<");
+    return text.replace(/(([.?!]['"”]?\s+)|((?![.?!])[\f\n\r\v]\s*))(?=[A-Z\d\$\('"“])/g, "$1>|<").split(">|<");
   }
 };

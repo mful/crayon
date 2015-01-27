@@ -32,7 +32,10 @@ crayon.models.Annotation = ( function () {
   };
 
   Annotation.prototype.toQueryStr = function () {
-    return crayon.helpers.url.toQueryStr( this.attributes )
+    return crayon.helpers.url.toQueryStr({
+      text: this.attributes.text,
+      url: this.attributes.url
+    });
   };
 
   // private helpers
