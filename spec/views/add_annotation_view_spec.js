@@ -1,7 +1,9 @@
 describe( 'crayon.views.AddAnnotationView', function () {
 
   beforeEach( function () {
+    spyOn( crayon.helpers.xhr, 'get' ).and.returnValue( true );
     crayon.init();
+
     this.selection = {
       rangeCount: 1,
       getRangeAt: function ( i ){
@@ -10,7 +12,7 @@ describe( 'crayon.views.AddAnnotationView', function () {
         }
       }
     }
-    this.annotation = new crayon.models.Annotation( this.selection );
+    this.annotation = crayon.models.Annotation.createFromSelection( this.selection );
     this.view = new crayon.views.AddAnnotationView();
   });
 

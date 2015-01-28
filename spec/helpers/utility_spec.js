@@ -160,6 +160,37 @@ describe( 'crayon.helpers.utility', function () {
     });
   });
 
+  describe( '#merge', function () {
+
+    describe( 'when no overrides are given', function () {
+      var defaults = {test: 'this', out: 1};
+      var overrides = {};
+
+      it( 'should return the defaults', function () {
+        expect( this.helper.merge(defaults, overrides) ).toEqual( defaults );
+      })
+    });
+
+    describe( 'when some overrides are given', function () {
+      var defaults = {test: 'this', out: 1};
+      var overrides = {test: 'that', now: true};
+      var expectedResult = {test: 'that', out: 1, now: true};
+
+      it( 'should return an object with all keys from overrides, plus missing data from defaults', function () {
+        expect( this.helper.merge(defaults, overrides) ).toEqual( expectedResult );
+      })
+    });
+
+    describe( 'when all defaults are to be overwritten', function () {
+      var defaults = {test: 'this', out: 1};
+      var overrides = {test: 'that', out: 2, now: true};
+
+      it( 'should return a copy of overrides', function () {
+        expect( this.helper.merge(defaults, overrides) ).toEqual( overrides );
+      })
+    });
+  });
+
   describe( '#regexEscape', function () {
     it( 'should escape all special characters', function () {
       var text = "This is-/(the)\\ story of a ^$*girl +?.|[]{}";

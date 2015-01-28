@@ -1,19 +1,41 @@
-window.crayon || ( window.crayon = {} );
-
 crayon.models || ( crayon.models = {} );
 
 crayon.models.Annotation = ( function () {
   MIN_FRAGMENT_LENGTH = 10;
 
-  Annotation.prototype.attributes = {
+  Annotation.createFromSelection = function ( selection ) {
+    var annotation = new Annotation();
+    annotation.attributes.text = annotation.parseText( selection );
+    annotation.attributes.url = crayon.helpers.url.currentHref();
+
+    return annotation;
+  };
+
+  Annotation.fetchAllForPage = function ( url, callback ) {
+    crayon.helpers.xhr.get(
+      crayon.helpers.routes.api_page_annotations_url( url ),
+      function ( err, response ) {
+        if ( err ) return callback( [] );
+
+        var annotations = response.data.annotations.map( function ( annotation ) {
+          return new Annotation( annotation );
+        });
+
+        return callback( annotations );
+      }
+    );
+  };
+
+  Annotation.prototype.defaults = {
     text: null,
     url: null
   };
 
-  function Annotation ( selection ) {
+  function Annotation ( attributes ) {
+    if( !attributes ) attributes = {};
+
+    this.attributes = crayon.helpers.utility.merge( this.defaults, attributes );
     this.toQueryStr = this.toQueryStr.bind( this );
-    this.attributes.text = this.parseText( selection );
-    this.attributes.url = crayon.helpers.url.currentHref();
   };
 
   Annotation.prototype.parseText = function ( selection ) {

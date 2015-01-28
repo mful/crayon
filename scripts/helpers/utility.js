@@ -63,6 +63,21 @@ crayon.helpers.utility = {
     return !!parent.trim().match( childRegex );
   },
 
+  // NOTE: remove if underscore.js ends up added
+  merge: function ( defaults, overrides ) {
+    var merged = {},
+        defaultsKeys = Object.keys( defaults ),
+        overridesKeys = Object.keys( overrides ),
+        keys, i;
+    keys = defaultsKeys.concat( overridesKeys );
+
+    for ( i = 0; i < keys.length; i++ ) {
+      merged[keys[i]] = ( overrides[keys[i]] || defaults[keys[i]] );
+    }
+
+    return merged;
+  },
+
   regexEscape: function ( string ) {
     return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
   },

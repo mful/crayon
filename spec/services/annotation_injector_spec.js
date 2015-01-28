@@ -20,7 +20,7 @@ describe( 'crayon.services.AnnotationInjector', function () {
     crayon.helpers.dom.getBaseTextNodes( this.html, this.pageNodes );
 
     spyOn( crayon.helpers.url, 'currentHref' ).and.returnValue( 'https://hogwarts.com' );
-    this.annotation = new crayon.models.Annotation( this.selection );
+    this.annotation = crayon.models.Annotation.createFromSelection( this.selection );
     this.injector = new crayon.services.AnnotationInjector( this.annotation, crayon.views.AnnotatedTextView );
   });
 

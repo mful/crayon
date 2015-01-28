@@ -36,7 +36,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
   describe( '#showCreateWidget', function () {
     beforeEach( function () {
-      this.annotation = new crayon.models.Annotation({
+      this.annotation = crayon.models.Annotation.createFromSelection({
         rangeCount: 1,
         getRangeAt: function ( i ){
           return {

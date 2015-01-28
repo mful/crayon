@@ -7,6 +7,9 @@ crayon.dispatchers.Dispatcher = ( function () {
     var _this = this;
 
     switch ( payload.message ) {
+      case crayon.constants.AppConstants.READY:
+        _this.fetchPageAnnotations();
+        break;
       case crayon.constants.AnnotationConstants.NEW_ANNOTATION:
         _this.newAnnotation( payload.data );
         break;
@@ -26,13 +29,29 @@ crayon.dispatchers.Dispatcher = ( function () {
     return injector.inject();
   };
 
+  Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
+    var _this = this;
+
+    return crayon.models.Annotation.fetchAllForPage(
+      crayon.helpers.url.currentHref(),
+      function ( annotations ) {
+
+        for ( i = 0; i < annotations.length; i++ ) {
+          _this.addAnnotation( annotations[i] );
+        }
+
+        return annotations;
+      }
+    )
+  };
+
   Dispatcher.prototype.maybeClearHighlight = function () {
     return crayon.windowManager.maybeHideWidget();
   };
 
   Dispatcher.prototype.newAnnotation = function ( selection ) {
     crayon.windowManager.showCreateWidget(
-      new crayon.models.Annotation( selection )
+      crayon.models.Annotation.createFromSelection( selection )
     );
   };
 

@@ -14,14 +14,90 @@ describe( 'crayon.models.Annotation', function () {
     };
 
     spyOn( crayon.helpers.url, 'currentHref' ).and.returnValue( 'https://hogwarts.com' );
-    this.annotation = new crayon.models.Annotation( this.selection );
+    this.annotation = crayon.models.Annotation.createFromSelection( this.selection );
   });
 
   afterEach( function () {
     delete this.annotation;
   });
 
-  describe('#parseText', function () {
+  describe( '.createFromSelection', function () {
+    it( 'should create an annotation with the expected attributes', function () {
+      var result = crayon.models.Annotation.createFromSelection( this.selection );
+      expect( result.attributes ).toEqual({ text: 'We are not descended from fearful men.', url: 'https://hogwarts.com' });
+    });
+  });
+
+  describe( '.fetchAllForPage', function () {
+
+    describe( 'when there is a network error', function () {
+      beforeEach( function () {
+        spyOn( crayon.helpers.xhr, 'get' ).and.callFake( function ( path, callback ) {
+          return callback( true, undefined );
+        });
+
+        this.callback = function( list ) {}
+
+        spyOn( this, 'callback' );
+
+        crayon.models.Annotation.fetchAllForPage('http://hogwarts.com', this.callback)
+      });
+
+      it( 'should return an empty array', function () {
+        expect( this.callback ).toHaveBeenCalledWith( [] );
+      });
+    });
+
+    describe( 'when the page has annotations', function () {
+      beforeEach( function () {
+        var _this = this;
+        this.annotations = [{text: 'some text', url: 'lego.com'}, {text: 'test test test', url: 'lego.com'}]
+
+        spyOn( crayon.helpers.xhr, 'get' ).and.callFake( function ( path, callback ) {
+          return callback( false, {data: {annotations: _this.annotations}} );
+        });
+
+        this.callback = function( list ) {}
+
+        spyOn( this, 'callback' );
+
+        crayon.models.Annotation.fetchAllForPage('http://hogwarts.com', this.callback)
+      });
+
+      it( 'should return an Annotation instance for each associated with the page', function () {
+        expect( this.callback ).toHaveBeenCalledWith(
+          [
+            jasmine.objectContaining({
+              attributes: {text: 'some text', url: 'lego.com'}
+            }),
+            jasmine.objectContaining({
+              attributes: {text: 'test test test', url: 'lego.com'}
+            })
+          ]
+        );
+      });
+    });
+
+    describe( 'when the page has no annotations', function () {
+      beforeEach( function () {
+        spyOn( crayon.helpers.xhr, 'get' ).and.callFake( function ( path, callback ) {
+          return callback( false, {data: {annotations: []}} );
+        });
+
+        this.callback = function( list ) {}
+
+        spyOn( this, 'callback' );
+
+        crayon.models.Annotation.fetchAllForPage('http://hogwarts.com', this.callback)
+      });
+
+      it( 'should return an empty array', function () {
+        expect( this.callback ).toHaveBeenCalledWith( [] );
+      });
+    });
+  });
+
+  describe( '#parseText', function () {
 
     // one, sweeping integration test
     describe( 'when given a complex, but otherwise valid selection', function () {

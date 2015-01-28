@@ -1,6 +1,6 @@
 window.crayon || ( window.crayon = {} );
 
-crayon.baseDomain = 'http://scribble.dev:3000';
+crayon.env = 'development';
 
 crayon.containerId = 'crayon-wrapper';
 
@@ -13,6 +13,12 @@ crayon.init = function () {
   crayon.windowManager = new crayon.coordinators.WindowManager();
   crayon.dispatcher = new crayon.dispatchers.Dispatcher();
   new crayon.observers.HighlightObserver();
+
+  crayon.dispatcher.dispatch({
+    message: crayon.constants.AppConstants.READY,
+    data: {}
+  });
+
   return this;
 };
 
