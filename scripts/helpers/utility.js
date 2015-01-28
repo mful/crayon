@@ -1,17 +1,18 @@
-crayon.helpers || ( crayon.helpers = {} )
+crayon.helpers || ( crayon.helpers = {} );
+crayon.helpers.utility = {};
 
-crayon.helpers.utility = {
+( function ( namespace ) {
 
-  addClass: function ( element, cssClass ) {
+  namespace.addClass = function ( element, cssClass ) {
     var regex = new RegExp( '(?:^|\\s)' + cssClass + '(?!\\S)' );
 
     if ( !!element.className.match( regex ) ) return;
     element.className = element.className + ' ' + cssClass;
 
     return element;
-  },
+  };
 
-  compact: function ( list ) {
+  namespace.compact = function ( list ) {
     var results = [], i;
 
     for ( i = 0; i < list.length; i++ ) {
@@ -20,14 +21,14 @@ crayon.helpers.utility = {
     }
 
     return results;
-  },
+  };
 
-  escapedRegex: function ( string ) {
-    return new RegExp( crayon.helpers.utility.regexEscape(string) );
-  },
+  namespace.escapedRegex = function ( string ) {
+    return new RegExp( namespace.regexEscape(string) );
+  };
 
   // NOTE: remove if underscore.js ends up added
-  filter: function ( list, func ) {
+  namespace.filter = function ( list, func ) {
     var results = [], i;
 
     for ( i = 0; i < list.length; i++ ) {
@@ -35,36 +36,36 @@ crayon.helpers.utility = {
     }
 
     return results;
-  },
+  };
 
   // NOTE: remove if underscore.js ends up added
-  find: function ( list, testerFunc ) {
+  namespace.find = function ( list, testerFunc ) {
     for ( var i = 0; i < list.length; i++ ) {
       if ( testerFunc(list[i]) ) return list[i];
     }
-  },
+  };
 
-  includes: function ( list, candidate ) {
+  namespace.includes = function ( list, candidate ) {
     for ( var i = 0; i < list.length; i++ ) {
       if ( list[i] === candidate ) return true;
     }
 
     return false;
-  },
+  };
 
-  isBlank: function ( string ) {
+  namespace.isBlank = function ( string ) {
     return !string || /^\s*$/.test( string );
-  },
+  };
 
-  isContained: function ( parent, child ) {
+  namespace.isContained = function ( parent, child ) {
     var childRegex;
     childRegex = crayon.helpers.utility.escapedRegex( child.trim() );
 
     return !!parent.trim().match( childRegex );
-  },
+  };
 
   // NOTE: remove if underscore.js ends up added
-  merge: function ( defaults, overrides ) {
+  namespace.merge = function ( defaults, overrides ) {
     var merged = {},
         defaultsKeys = Object.keys( defaults ),
         overridesKeys = Object.keys( overrides ),
@@ -76,20 +77,20 @@ crayon.helpers.utility = {
     }
 
     return merged;
-  },
+  };
 
-  regexEscape: function ( string ) {
+  namespace.regexEscape = function ( string ) {
     return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-  },
+  };
 
-  removeClass: function ( element, cssClass ) {
+  namespace.removeClass = function ( element, cssClass ) {
     var regex = new RegExp( '(?:^|\\s)' + cssClass + '(?!\\S)' );
     element.className = element.className.replace( regex, '' );
 
     return element;
-  },
+  };
 
-  separateSentences: function ( text ) {
+  namespace.separateSentences = function ( text ) {
     return text.replace(/(([.?!]['"”]?\s+)|((?![.?!])[\f\n\r\v]\s*))(?=[A-Z\d\$\('"“])/g, "$1>|<").split(">|<");
-  }
-};
+  };
+})( crayon.helpers.utility );

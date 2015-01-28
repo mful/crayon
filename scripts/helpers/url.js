@@ -1,7 +1,8 @@
-crayon.helpers || ( crayon.helpers = {} )
+crayon.helpers || ( crayon.helpers = {} );
+crayon.helpers.url = {};
 
-crayon.helpers.url = {
-  toQueryStr: function ( data ) {
+( function ( namespace ) {
+  namespace.toQueryStr = function ( data ) {
     var prop, propStrs, val;
     if ( data === null ) data = {};
 
@@ -13,9 +14,9 @@ crayon.helpers.url = {
     }
 
     return propStrs.join( '&' );
-  },
+  };
 
-  currentHref: function () {
+  namespace.currentHref = function () {
     return window.location.href;
-  }
-};
+  };
+})( crayon.helpers.url );
