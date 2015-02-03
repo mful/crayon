@@ -1,6 +1,6 @@
 window.crayon || ( window.crayon = {} );
 
-crayon.env = 'development';
+crayon.env || ( crayon.env = 'development' );
 
 crayon.containerId = 'crayon-wrapper';
 
@@ -13,6 +13,7 @@ crayon.init = function () {
   crayon.windowManager = new crayon.coordinators.WindowManager();
   crayon.dispatcher = new crayon.dispatchers.Dispatcher();
   new crayon.observers.HighlightObserver();
+  new crayon.observers.MouseupObserver();
 
   crayon.dispatcher.dispatch({
     message: crayon.constants.AppConstants.READY,

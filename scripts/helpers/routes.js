@@ -5,9 +5,17 @@ crayon.helpers.routes = {};
 
   var _urlRoot;
 
+  // api
+
   namespace.api_page_annotations_url = function ( url ) {
     return urlRoot() + '/api/annotations/by_page?' +
       crayon.helpers.url.toQueryStr({ url: url });
+  };
+
+  // application routes
+
+  namespace.annotation_url = function ( id ) {
+    return urlRoot() + '/annotations/' + id;
   };
 
   // TODO: update to use heroku HTTPS

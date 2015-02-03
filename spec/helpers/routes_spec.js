@@ -16,4 +16,11 @@ describe( 'crayon.helpers.routes', function () {
       expect( this.helper.api_page_annotations_url(url) ).toEqual( expectedResult );
     });
   });
+
+  describe( '#annotation_url', function () {
+    it( 'should return the expected url for the annotation', function () {
+      var expectedResult = 'http://scribble.test/annotations/1';
+      expect( this.helper.annotation_url(1) ).toEqual( expectedResult );
+    });
+  });
 });

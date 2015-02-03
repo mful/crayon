@@ -23,6 +23,16 @@ crayon.helpers.utility = {};
     return results;
   };
 
+  namespace.debounce = function ( func, delay ) {
+    var timer, delayer;
+
+    return function () {
+      if ( timer ) clearTimeout( timer );
+      timer = setTimeout( func, delay );
+      return timer;
+    };
+  }
+
   namespace.escapedRegex = function ( string ) {
     return new RegExp( namespace.regexEscape(string) );
   };
@@ -92,5 +102,12 @@ crayon.helpers.utility = {};
 
   namespace.separateSentences = function ( text ) {
     return text.replace(/(([.?!]['"”]?\s+)|((?![.?!])[\f\n\r\v]\s*))(?=[A-Z\d\$\('"“])/g, "$1>|<").split(">|<");
+  };
+
+  // NOTE: remove if underscore.js ends up added
+  var uniqueIdCount = 0;
+  namespace.uniqueId = function ( prefix ) {
+    prefix || ( prefix = '' );
+    return prefix + ++uniqueIdCount;
   };
 })( crayon.helpers.utility );

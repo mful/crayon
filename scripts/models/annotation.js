@@ -35,6 +35,7 @@ crayon.models.Annotation = ( function () {
     if( !attributes ) attributes = {};
 
     this.attributes = crayon.helpers.utility.merge( this.defaults, attributes );
+    this.cid = crayon.helpers.utility.uniqueId( 'annotation_' );
     this.toQueryStr = this.toQueryStr.bind( this );
   };
 

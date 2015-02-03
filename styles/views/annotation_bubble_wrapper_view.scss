@@ -1,0 +1,72 @@
+.crayon-annotation-bubble-wrapper-view {
+  border: solid 1px $paper_dark;
+  background: $paper;
+  position: absolute;
+  // Height/Width need to match value in scripts/views/annotation_bubble_wrapper_view.js
+  // Height in the view = this height, plus height of caret
+  height: 240px;
+  max-width: 760px;
+  min-width: 570px;
+  opacity: 0.97;
+  transition: width 0.25s, left 0.25s, top 0.5s;
+  z-index: 99999;
+
+  &:after, &:before {
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    left: 50%;
+    position: absolute;
+    pointer-events: none;
+    width: 0;
+  }
+
+  &:after {
+    border-width: 14px;
+    margin-left: -14px;
+    opacity: 0.97;
+  }
+
+  &:before {
+    border-width: 15px;
+    margin-left: -15px;
+  }
+
+  &.above {
+    &:after, &:before {
+      top: 100%;
+    }
+
+    &:after {
+      border-top-color: $paper;
+      border-top-width: 24px;
+    }
+
+    &:before {
+      border-top-color: $paper_dark;
+      border-top-width: 25px;
+    }
+  }
+
+  &.below {
+    &:after, &:before {
+      bottom: 100%;
+    }
+
+    &:after {
+      border-bottom-color: $paper;
+      border-bottom-width: 24px;
+    }
+
+    &:before {
+      border-bottom-color: $paper_dark;
+      border-bottom-width: 25px;
+    }
+  }
+
+  iframe {
+    border: none;
+    height: 100%;
+    width: 100%;
+  }
+}

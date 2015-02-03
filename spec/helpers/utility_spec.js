@@ -67,6 +67,32 @@ describe( 'crayon.helpers.utility', function () {
     });
   });
 
+  describe( '#debounce', function () {
+
+    beforeEach( function () {
+      this.func = function () { return true; };
+      this.debouncedFunc = this.helper.debounce( this.func, 200 );
+
+      spyOn( this, 'func' );
+    });
+
+    it('should only call the given function once per given interval', function () {
+      var _this = this;
+
+      this.debouncedFunc();
+      this.debouncedFunc();
+      this.debouncedFunc();
+      setTimeout( 200, function () {
+        _this.debouncedFunc();
+        _this.debouncedFunc();
+        _this.debouncedFunc();
+      });
+      setTimeout( 300, function () {
+        expect( _this.func.calls.count() ).toEqual( 2 );
+      })
+    });
+  });
+
   describe( '#escapedRegex', function () {
     it( 'should a regex for the given text, with all special chars escaped', function () {
       var text = "This is-/(the)\\ story of a ^$*girl +?.|[]{}";
@@ -255,4 +281,67 @@ describe( 'crayon.helpers.utility', function () {
       expect( this.helper.separateSentences(text) ).toEqual( expectedResult );
     });
   });
+
+  describe( '#uniqueId', function () {
+    beforeEach( function () {
+      this.idCount = parseInt( this.helper.uniqueId() );
+    });
+
+    describe( 'when given a prefix', function () {
+      it( 'should return the iterator appended to the given prefix', function () {
+        expect( this.helper.uniqueId('prefix') ).toEqual( 'prefix' + ++this.idCount );
+      });
+    });
+
+    describe( 'when NOT given a prefix', function () {
+      it( 'should return the iterator as a string', function () {
+        expect( this.helper.uniqueId() ).toEqual( '' + ++this.idCount );
+      });
+
+      it( 'should not return an already used iterator', function () {
+        this.helper.uniqueId();
+        this.helper.uniqueId();
+        this.helper.uniqueId();
+
+        expect( this.helper.uniqueId() ).toEqual( '' + (this.idCount + 4) );
+      });
+    });
+  });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

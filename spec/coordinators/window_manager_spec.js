@@ -8,6 +8,38 @@ describe( 'crayon.coordinators.WindowManager', function () {
     delete this.coordinator;
   });
 
+  describe( '#handleMouseup', function () {
+    describe( 'when there is an active annotation bubble', function () {
+
+      beforeEach( function () {
+        var view = {};
+
+        this.view = new crayon.views.AnnotationBubbleWrapperView({
+          element: document.createElement( 'div' ),
+          annotation: new crayon.models.Annotation({ id: 1 }),
+          view: view
+        });
+
+        this.coordinator.windows.annotationBubble = this.view;
+
+        spyOn( this.view, 'remove' );
+        this.coordinator.handleMouseup();
+      });
+
+      afterEach( function () {
+        delete this.view;
+      });
+
+      it( 'should close the bubble, and null out the reference', function () {
+        expect( this.view.remove ).toHaveBeenCalled();
+      });
+
+      it( 'should null out the reference', function () {
+        expect( this.coordinator.windows.annotationBubble === null ).toEqual( true );
+      });
+    });
+  });
+
   describe( '#maybeHideWidget', function () {
     describe( 'when the AddAnnotation widget exists', function () {
 
@@ -30,6 +62,40 @@ describe( 'crayon.coordinators.WindowManager', function () {
     describe( 'when the AddAnnotation widget does not exist', function () {
       it( 'should return null', function () {
         expect( this.coordinator.maybeHideWidget() ).toEqual( null );
+      });
+    });
+  });
+
+  describe( '#showCommentsBubble', function () {
+    describe( 'when there already is an active bubble', function () {
+      beforeEach( function () {
+        this.childView = {render: function () {}};
+        var data = {
+          element: document.createElement( 'div' ),
+          annotation: new crayon.models.Annotation({ id: 1 }),
+          view: this.childView
+        };
+        this.view = {remove: function () {}};
+        this.coordinator.windows.annotationBubble = this.view;
+
+        spyOn( crayon.views, 'AnnotationBubbleWrapperView' ).and.returnValue( this.childView );
+        spyOn( this.view, 'remove' );
+        spyOn( this.childView, 'render' );
+
+        this.coordinator.showCommentsBubble( data );
+      });
+
+      afterEach( function () {
+        delete this.view;
+        delete this.childView;
+      });
+
+      it( 'should remove the old view', function () {
+        expect( this.view.remove ).toHaveBeenCalled();
+      });
+
+      it( 'should render a new view', function () {
+        expect( this.childView.render ).toHaveBeenCalled();
       });
     });
   });

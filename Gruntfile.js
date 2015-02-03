@@ -99,7 +99,7 @@ module.exports = function(grunt){
       src : ['build/scripts/scribble.js'],
       options: {
         specs : 'spec/**/*spec.js',
-        helpers: 'spec/support/helpers/*.js',
+        helpers: ['spec/support/helpers/*.js'],
         keepRunner: true
       }
     },

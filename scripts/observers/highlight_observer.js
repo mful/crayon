@@ -1,5 +1,7 @@
-crayon.observers || ( crayon.observers = {} )
+crayon.observers || ( crayon.observers = {} );
 
+// TODO: move to a service, which processes highlights following mousup events
+// TODO: observed by crayon.observers.MouseupObserver?
 crayon.observers.HighlightObserver = ( function () {
 
   function HighlightObserver () {
@@ -7,7 +9,7 @@ crayon.observers.HighlightObserver = ( function () {
     this.getSelection = this.getSelection.bind( this );
     this.highlight = this.highlight.bind( this );
     this.delegateEvents();
-  }
+  };
 
   HighlightObserver.prototype.delegateEvents = function () {
     return ev( document ).on( 'mouseup', this.highlight );

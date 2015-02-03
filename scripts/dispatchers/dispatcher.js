@@ -13,8 +13,14 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.AnnotationConstants.NEW_ANNOTATION:
         _this.newAnnotation( payload.data );
         break;
+      case crayon.constants.CommentConstants.SHOW_COMMENTS:
+        _this.showComments( payload.data );
+        break;
       case crayon.constants.UserActionConstants.CLEAR_HIGHLIGHT:
         _this.maybeClearHighlight();
+        break;
+      case crayon.constants.UserActionConstants.MOUSEUP:
+        _this.manageWindows( payload.data );
         break;
       case crayon.constants.AnnotationConstants.ADD_ANNOTATION:
         _this.addAnnotation( payload.data );
@@ -45,6 +51,10 @@ crayon.dispatchers.Dispatcher = ( function () {
     )
   };
 
+  Dispatcher.prototype.manageWindows = function ( event ) {
+    return crayon.windowManager.handleMouseup( event );
+  };
+
   Dispatcher.prototype.maybeClearHighlight = function () {
     return crayon.windowManager.maybeHideWidget();
   };
@@ -53,6 +63,10 @@ crayon.dispatchers.Dispatcher = ( function () {
     crayon.windowManager.showCreateWidget(
       crayon.models.Annotation.createFromSelection( selection )
     );
+  };
+
+  Dispatcher.prototype.showComments = function ( data ) {
+    return crayon.windowManager.showCommentsBubble( data );
   };
 
   return Dispatcher;
