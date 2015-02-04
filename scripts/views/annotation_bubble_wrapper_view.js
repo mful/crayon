@@ -74,7 +74,7 @@ crayon.views.AnnotationBubbleWrapperView = ( function () {
 
   // TODO: clean this mess up
   AnnotationBubbleWrapperView.prototype._cssLeftVal = function ( boundingBox, element ) {
-    var xdiff, elementOffset, min, width;
+    var xdiff, elementOffset, left, min, width;
 
     // get the center of the bounding box, from the left
     xdiff = ( boundingBox.right - boundingBox.left ) / 2;
@@ -85,9 +85,9 @@ crayon.views.AnnotationBubbleWrapperView = ( function () {
     min = elementOffset * -1 + 5;
     width = this._width();
 
-    var left = xdiff - ( width / 2 ) - element.offsetLeft;
+    left = xdiff - ( width / 2 ) - element.offsetLeft;
 
-    // check if the bubble would bleed off the right of the screen
+    // check if the bubble would bleed off the right edge of the screen
     if ( elementOffset + left + width > this._windowWidth() ) {
       // ( this._windowWidth() - width - 5 ) would set the bubble just inside
       // the right edge, if the parent were the window itself. Subtract
