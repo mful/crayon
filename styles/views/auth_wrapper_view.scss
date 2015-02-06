@@ -1,0 +1,20 @@
+.crayon-auth-wrapper-view {
+  background: rgba(0,0,0,0.2);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+
+  iframe {
+    background: transparent;
+    border: none;
+    height: 480px;
+    left: 50%;
+    margin: -250px 0 0 -150px;
+    position: absolute;
+    top: 50%;
+    visibility: hidden;
+    width: 300px;
+  }
+}

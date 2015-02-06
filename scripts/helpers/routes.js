@@ -5,6 +5,10 @@ crayon.helpers.routes = {};
 
   var _urlRoot;
 
+  namespace.origin = function () {
+    return urlRoot();
+  };
+
   // api
 
   namespace.api_page_annotations_url = function ( url ) {
@@ -16,6 +20,11 @@ crayon.helpers.routes = {};
 
   namespace.annotation_url = function ( id ) {
     return urlRoot() + '/annotations/' + id;
+  };
+
+  namespace.signup_url = function ( params ) {
+    params || ( params = {} );
+    return urlRoot() + '/signup?' + crayon.helpers.url.toQueryStr( params );
   };
 
   // TODO: update to use heroku HTTPS
