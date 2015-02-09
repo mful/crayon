@@ -29,6 +29,7 @@ describe( 'crayon.views.AuthWrapperView', function () {
   describe( '#notifyRemove', function () {
 
     beforeEach( function () {
+      crayon.dispatcher = {dispatch: function () {}};
       spyOn( crayon.dispatcher, 'dispatch' );
       this.view.notifyRemove();
     });

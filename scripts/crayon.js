@@ -11,6 +11,9 @@ crayon.observers || ( crayon.observers = {} );
 crayon.mediators || ( crayon.mediators = {} );
 
 crayon.init = function () {
+  var articleTag = document.querySelector('meta[property="og:type"]');
+  if ( !articleTag || articleTag.content !== 'article' ) return;
+
   crayon.vent = ev( document.createElement( 'div' ) );
   crayon.windowManager = new crayon.coordinators.WindowManager();
   crayon.dispatcher = new crayon.dispatchers.Dispatcher();
