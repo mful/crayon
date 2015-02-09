@@ -23,4 +23,11 @@ describe( 'crayon.helpers.routes', function () {
       expect( this.helper.annotation_url(1) ).toEqual( expectedResult );
     });
   });
+
+  describe( '#signup_url', function () {
+    it( 'should return the exected url', function () {
+      var expectedResult = 'http://scribble.test/signup?referring_action=vote';
+      expect( this.helper.signup_url({ referring_action: 'vote' }) ).toEqual( expectedResult );
+    });
+  });
 });
