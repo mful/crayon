@@ -16,6 +16,12 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.CommentConstants.SHOW_COMMENTS:
         _this.showComments( payload.data );
         break;
+      case crayon.constants.CourierConstants.POST_LOGIN:
+        _this.notifyLogin( payload.data );
+        break;
+      case crayon.constants.SessionConstants.AUTH_NEEDED:
+        _this.promptAuth( payload.data );
+        break;
       case crayon.constants.UserActionConstants.CLEAR_HIGHLIGHT:
         _this.maybeClearHighlight();
         break;
@@ -24,6 +30,9 @@ crayon.dispatchers.Dispatcher = ( function () {
         break;
       case crayon.constants.AnnotationConstants.ADD_ANNOTATION:
         _this.addAnnotation( payload.data );
+        break;
+      case crayon.constants.WindowConstants.REMOVE_WINDOW:
+        _this.removeWindow( payload.data.view );
         break;
     }
 
@@ -63,6 +72,23 @@ crayon.dispatchers.Dispatcher = ( function () {
     crayon.windowManager.showCreateWidget(
       crayon.models.Annotation.createFromSelection( selection )
     );
+  };
+
+  Dispatcher.prototype.notifyLogin = function ( data ) {
+    crayon.windowManager.removeWindow( crayon.windowManager.windows.authView );
+
+    return crayon.windowManager.messageWindows(
+      crayon.constants.CourierConstants.POST_LOGIN,
+      data
+    );
+  };
+
+  Dispatcher.prototype.promptAuth = function ( data ) {
+    crayon.windowManager.showAuth( data.referringAction );
+  };
+
+  Dispatcher.prototype.removeWindow = function ( view ) {
+    crayon.windowManager.removeWindow( view );
   };
 
   Dispatcher.prototype.showComments = function ( data ) {

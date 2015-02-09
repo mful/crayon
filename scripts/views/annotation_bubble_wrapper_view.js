@@ -3,7 +3,7 @@ crayon.views || ( crayon.views = {} );
 crayon.views.AnnotationBubbleWrapperView = ( function () {
 
   AnnotationBubbleWrapperView.prototype.id = 'crayon-bubble-wrap';
-  AnnotationBubbleWrapperView.prototype.className = 'crayon-annotation-bubble-wrapper-view';
+  AnnotationBubbleWrapperView.prototype.className = 'crayon-annotation-bubble-wrapper-view crayon-window';
   var MAX_WIDTH = 762,
       MIN_WIDTH = 572
       HEIGHT = 272;

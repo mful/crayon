@@ -1,5 +1,7 @@
 *\/\.
 *\.DS*
+*.crx
+*.pem
 
 /node_modules
 /_SpecRunner.html

@@ -23,19 +23,41 @@ describe( 'crayon.coordinators.WindowManager', function () {
         this.coordinator.windows.annotationBubble = this.view;
 
         spyOn( this.view, 'remove' );
-        this.coordinator.handleMouseup();
       });
 
       afterEach( function () {
         delete this.view;
       });
 
-      it( 'should close the bubble, and null out the reference', function () {
-        expect( this.view.remove ).toHaveBeenCalled();
+      describe( 'when the mouseup occurs outside of the active view', function () {
+
+        beforeEach( function () {
+          this.coordinator.handleMouseup({ target: document.createElement('div') });
+        });
+
+        it( 'should close the bubble, and null out the reference', function () {
+          expect( this.view.remove ).toHaveBeenCalled();
+        });
+
+        it( 'should null out the reference', function () {
+          expect( this.coordinator.windows.annotationBubble === null ).toEqual( true );
+        });
       });
 
-      it( 'should null out the reference', function () {
-        expect( this.coordinator.windows.annotationBubble === null ).toEqual( true );
+      describe( 'when the mouseup occurs within the active window', function () {
+
+        beforeEach( function () {
+          var activeView = {
+            element: document.createElement( 'div' )
+          };
+          this.coordinator.activeWindow = activeView;
+
+          this.coordinator.handleMouseup({target: activeView.element})
+        });
+
+        it( 'should do nothing', function () {
+          expect( this.view.remove ).not.toHaveBeenCalled();
+        });
       });
     });
   });
@@ -66,10 +88,87 @@ describe( 'crayon.coordinators.WindowManager', function () {
     });
   });
 
+  describe( '#messageWindows', function () {
+
+    beforeEach( function () {
+      crayon.courier = {post: function (msg, data) {}}
+
+      this.coordinator.windows = [{iframe: {contentWindow: {}}},null,{iframe: {contentWindow: {}}}, {}];
+      spyOn( crayon.courier, 'post' );
+
+      this.coordinator.messageWindows( 'message', {} );
+    });
+
+    afterEach( function () {
+      delete crayon.courier;
+    });
+
+    it( 'should post a message to each window with an iframe', function () {
+      expect( crayon.courier.post.calls.count() ).toEqual(2);
+    });
+  });
+
+  describe( '#removeWindow', function () {
+
+    beforeEach( function () {
+      this.view = {remove: function () {}};
+      this.coordinator.activeWindow = this.view;
+      this.coordinator.windows.annotationBubble = this.view;
+
+      spyOn( this.view, 'remove' );
+
+      this.coordinator.removeWindow( this.view );
+    });
+
+    it( 'should null out the active window', function () {
+      expect( this.coordinator.activeWindow ).toEqual( null );
+    });
+
+    it( 'should remove the view', function () {
+      expect( this.view.remove ).toHaveBeenCalled();
+    });
+
+    it( 'should null out the reference to the window in window manager', function () {
+      expect( this.coordinator.windows.annotationBubble ).toEqual(  null );
+    });
+  });
+
+  describe( '#showAuth', function () {
+
+    beforeEach( function () {
+      this.oldView = {remove: function () {}};
+      this.coordinator.windows.authView = this.oldView;
+
+      this.newView = {render: function () {}, element: document.createElement( 'div' )};
+
+      spyOn( crayon.views, 'AuthWrapperView' ).and.returnValue( this.newView );
+      spyOn( this.oldView, 'remove' );
+
+      this.coordinator.showAuth( 'vote' );
+    });
+
+    afterEach( function () {
+      delete this.oldView;
+      delete this.newView;
+    });
+
+    it( 'should remove the current authView', function () {
+      expect( this.oldView.remove ).toHaveBeenCalled();
+    });
+
+    it( 'should set a new authView', function () {
+      expect( this.coordinator.windows.authView ).toEqual( this.newView );
+    });
+
+    it( 'should set the new authView as active', function () {
+      expect( this.coordinator.activeWindow ).toEqual( this.newView );
+    })
+  });
+
   describe( '#showCommentsBubble', function () {
     describe( 'when there already is an active bubble', function () {
       beforeEach( function () {
-        this.childView = {render: function () {}};
+        this.childView = {render: function () {return this;}, element: document.createElement( 'div' )};
         var data = {
           element: document.createElement( 'div' ),
           annotation: new crayon.models.Annotation({ id: 1 }),
@@ -80,7 +179,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
         spyOn( crayon.views, 'AnnotationBubbleWrapperView' ).and.returnValue( this.childView );
         spyOn( this.view, 'remove' );
-        spyOn( this.childView, 'render' );
+        spyOn( this.childView, 'render' ).and.returnValue( this.childView );
 
         this.coordinator.showCommentsBubble( data );
       });
@@ -96,6 +195,10 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
       it( 'should render a new view', function () {
         expect( this.childView.render ).toHaveBeenCalled();
+      });
+
+      it( 'should set the new view as the active window', function () {
+        expect( this.childView ).toEqual( this.coordinator.activeWindow );
       });
     });
   });
@@ -144,4 +247,55 @@ describe( 'crayon.coordinators.WindowManager', function () {
       });
     });
   });
+
+  describe( '#setActive', function () {
+
+    beforeEach( function () {
+      var oldEl = document.createElement( 'div' );
+      oldEl.className = "crayon-active-window";
+
+      this.oldView = {element: oldEl};
+      this.newView = {element: document.createElement( 'div' )};
+
+      this.coordinator.activeWindow = this.oldView;
+
+      this.coordinator.setActive( this.newView );
+    });
+
+    it( 'should remove the active class from the current active window', function () {
+      expect( !!this.oldView.element.className.match(/crayon-active-window/) ).toEqual( false );
+    });
+
+    it( 'should add the active class to the new active window', function () {
+      expect( !!this.newView.element.className.match(/crayon-active-window/) ).toEqual( true );
+    });
+
+    it( 'should set the new view as active', function () {
+      expect( this.coordinator.activeWindow ).toEqual( this.newView );
+    });
+  });
+
+  describe( '#_getContentWindows', function () {
+
+    beforeEach( function () {
+      this.coordinator.windows = [{iframe: {contentWindow: {}}},null,{iframe: {contentWindow: {}}}, {}];
+    });
+
+    it( 'should return a list of content windows', function () {
+      var expectedResult = [{}, {}];
+      expect( this.coordinator._getContentWindows() ).toEqual( expectedResult );
+    });
+
+    describe( 'when there are no current windows', function () {
+
+      beforeEach( function () {
+        this.coordinator.windows = [null, {}]
+      });
+
+      it( 'should return an empty list', function () {
+        expect( this.coordinator._getContentWindows() ).toEqual( [] );
+      });
+    });
+  });
+
 });

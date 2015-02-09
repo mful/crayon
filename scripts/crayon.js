@@ -7,11 +7,14 @@ crayon.containerId = 'crayon-wrapper';
 crayon.models || ( crayon.models = {} );
 crayon.dispatchers || ( crayon.dispatchers = {} );
 crayon.coordinators || ( crayon.coordinators = {} );
+crayon.observers || ( crayon.observers = {} );
+crayon.mediators || ( crayon.mediators = {} );
 
 crayon.init = function () {
   crayon.vent = ev( document.createElement( 'div' ) );
   crayon.windowManager = new crayon.coordinators.WindowManager();
   crayon.dispatcher = new crayon.dispatchers.Dispatcher();
+  crayon.courier = new crayon.mediators.Courier();
   new crayon.observers.HighlightObserver();
   new crayon.observers.MouseupObserver();
 
