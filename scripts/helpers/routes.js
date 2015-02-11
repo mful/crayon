@@ -22,6 +22,10 @@ crayon.helpers.routes = {};
     return urlRoot() + '/annotations/' + id;
   };
 
+  namespace.new_annotation_comment_url = function ( id ) {
+    return urlRoot() + '/annotations/' + id + '/comments/new'
+  };
+
   namespace.signup_url = function ( params ) {
     params || ( params = {} );
     return urlRoot() + '/signup?' + crayon.helpers.url.toQueryStr( params );

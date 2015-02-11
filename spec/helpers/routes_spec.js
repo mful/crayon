@@ -24,6 +24,13 @@ describe( 'crayon.helpers.routes', function () {
     });
   });
 
+  describe( '#new_annotation_comment_url', function () {
+    it( 'should return the expected url', function () {
+      var expectedResult = 'http://scribble.test/annotations/1/comments/new';
+      expect( this.helper.new_annotation_comment_url(1) ).toEqual( expectedResult );
+    });
+  });
+
   describe( '#signup_url', function () {
     it( 'should return the exected url', function () {
       var expectedResult = 'http://scribble.test/signup?referring_action=vote';

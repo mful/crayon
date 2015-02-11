@@ -8,7 +8,10 @@ crayon.coordinators.WindowManager = ( function () {
   };
 
   WindowManager.prototype.handleMouseup = function ( event ) {
-    if ( this.activeWindow && event.target === this.activeWindow.element ) return;
+    if ( this.activeWindow &&
+        ( event.target === this.activeWindow.element ||
+          crayon.helpers.dom.isChildOf(this.activeWindow.element, event.target) )
+    ) return;
 
     if ( this.windows.annotationBubble ) {
       this.windows.annotationBubble.remove();
@@ -32,6 +35,8 @@ crayon.coordinators.WindowManager = ( function () {
   };
 
   WindowManager.prototype.removeWindow = function ( view ) {
+    if ( !view ) return;
+
     var keys = Object.keys( this.windows ), i;
     if ( this.activeWindow === view ) this.activeWindow = null;
 
@@ -77,6 +82,29 @@ crayon.coordinators.WindowManager = ( function () {
       this.windows.createWidget = new crayon.views.AddAnnotationView();
 
     return this.windows.createWidget.render( annotation );
+  };
+
+  WindowManager.prototype.showTextEditor = function ( data ) {
+    if ( this.windows.textEditorView ) {
+      if (
+          this.windows.textEditorView.commentableType === data.type &&
+          this.windows.textEditorView.commentableId === data.id
+      ) {
+        // show v hide?
+        return;
+      } else {
+        this.windows.textEditorView.remove();
+      }
+    }
+
+    this.windows.textEditorView = new crayon.views.TextEditorWrapperView({
+      commentableType: data.type,
+      commentableId: data.id
+    });
+
+    this.setActive( this.windows.textEditorView );
+
+    return this.windows.textEditorView.render();
   };
 
   WindowManager.prototype.setActive = function ( view ) {

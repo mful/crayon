@@ -44,7 +44,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
         });
       });
 
-      describe( 'when the mouseup occurs within the active window', function () {
+      describe( 'when the mouseup occurs on the active window element', function () {
 
         beforeEach( function () {
           var activeView = {
@@ -53,6 +53,26 @@ describe( 'crayon.coordinators.WindowManager', function () {
           this.coordinator.activeWindow = activeView;
 
           this.coordinator.handleMouseup({target: activeView.element})
+        });
+
+        it( 'should do nothing', function () {
+          expect( this.view.remove ).not.toHaveBeenCalled();
+        });
+      });
+
+      describe( 'when the mouseup occurs on a child element of the active window element', function () {
+
+        beforeEach( function () {
+          var el = document.createElement( 'div' ),
+              child = document.createElement( 'span' ),
+              activeView;
+
+          el.appendChild( child );
+
+          activeView = {element: el};
+          this.coordinator.activeWindow = activeView;
+
+          this.coordinator.handleMouseup({target: child})
         });
 
         it( 'should do nothing', function () {
@@ -244,6 +264,98 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
       it( 'should render the view', function () {
         expect( this.view.render ).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe( '#showTextEditor', function () {
+
+    beforeEach( function () {
+      spyOn( crayon.views, 'TextEditorWrapperView' ).and.returnValue({ render: function () {} });
+      spyOn( this.coordinator, 'setActive' );
+    });
+
+    describe( 'when there is not a textEditorView', function () {
+
+      beforeEach( function () {
+        var data = {type: 'comment', id: 1};
+        this.coordinator.showTextEditor( data );
+      });
+
+      it( 'should instantiate a new view', function () {
+        expect( crayon.views.TextEditorWrapperView ).toHaveBeenCalled();
+      });
+
+      it( 'should activate that view', function () {
+        expect( this.coordinator.setActive ).toHaveBeenCalled();
+      });
+    });
+
+    describe( 'when there is a textEditor view already', function () {
+
+      beforeEach( function () {
+        this.view = {
+          remove: function () {},
+          commentableType: 'comment',
+          commentableId: 1
+        };
+
+        this.coordinator.windows.textEditorView = this.view;
+
+        spyOn( this.view, 'remove' );
+      });
+
+      describe( 'and that view is for the same object', function () {
+        beforeEach( function () {
+          var data = {type: 'comment', id: 1};
+          this.coordinator.showTextEditor( data );
+        });
+
+        it( 'should not remove the view', function () {
+          expect( this.view.remove ).not.toHaveBeenCalled();
+        });
+
+        it( 'should not instantiate a new view', function () {
+          expect( crayon.views.TextEditorWrapperView ).not.toHaveBeenCalled();
+        });
+      });
+
+      describe( 'and that view is for a different type of object', function () {
+        beforeEach( function () {
+          var data = {type: 'reply', id: 1};
+          this.coordinator.showTextEditor( data );
+        });
+
+        it( 'should remove the current view', function () {
+          expect( this.view.remove ).toHaveBeenCalled();
+        });
+
+        it( 'should instantiate a new view', function () {
+          expect( crayon.views.TextEditorWrapperView ).toHaveBeenCalled();
+        });
+
+        it( 'should activate that view', function () {
+          expect( this.coordinator.setActive ).toHaveBeenCalled();
+        });
+      });
+
+      describe( 'and that view is for a different object of the same type', function () {
+        beforeEach( function () {
+          var data = {type: 'comment', id: 2};
+          this.coordinator.showTextEditor( data );
+        });
+
+        it( 'should remove the current view', function () {
+          expect( this.view.remove ).toHaveBeenCalled();
+        });
+
+        it( 'should instantiate a new view', function () {
+          expect( crayon.views.TextEditorWrapperView ).toHaveBeenCalled();
+        });
+
+        it( 'should activate that view', function () {
+          expect( this.coordinator.setActive ).toHaveBeenCalled();
+        });
       });
     });
   });

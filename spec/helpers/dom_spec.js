@@ -1,5 +1,32 @@
 describe( 'crayon.helpers.dom', function () {
 
+  beforeEach( function () {
+    this.helper = crayon.helpers.dom;
+  });
+
+  describe( '#isChildOf', function () {
+
+    beforeEach( function () {
+      this.parent = document.createElement( 'div' );
+      this.parent.innerHTML = '<span></span>';
+      this.child = document.createElement( 'p' );
+      this.parent.querySelector( 'span' ).appendChild( this.child );
+      this.orphan = document.createElement( 'h1' )
+    });
+
+    describe( 'when the proposed child can be traced back to the parent', function () {
+      it( 'should return true', function () {
+        expect( this.helper.isChildOf(this.parent, this.child) ).toEqual( true );
+      });
+    });
+
+    describe( 'when the proposed child is not a descendant of the parent', function () {
+      it( 'should return false', function () {
+        expect( this.helper.isChildOf(this.parent, this.orphan) ).toEqual( false );
+      });
+    });
+  });
+
   describe( '#getBaseTextNodes', function () {
     beforeEach( function () {
       this.html = document.createElement( 'div' );

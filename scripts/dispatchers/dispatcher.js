@@ -13,11 +13,17 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.AnnotationConstants.NEW_ANNOTATION:
         _this.newAnnotation( payload.data );
         break;
+      case crayon.constants.CommentConstants.NEW_COMMENT:
+        _this.newComment( payload.data.annotation_id );
+        break;
       case crayon.constants.CommentConstants.SHOW_COMMENTS:
         _this.showComments( payload.data );
         break;
       case crayon.constants.CourierConstants.POST_LOGIN:
         _this.notifyLogin( payload.data );
+        break;
+      case crayon.constants.CourierConstants.POST_CREATE_COMMENT:
+        _this.notifyCreateComment( payload.data );
         break;
       case crayon.constants.SessionConstants.AUTH_NEEDED:
         _this.promptAuth( payload.data );
@@ -74,11 +80,24 @@ crayon.dispatchers.Dispatcher = ( function () {
     );
   };
 
+  Dispatcher.prototype.newComment = function ( annotationId ) {
+    crayon.windowManager.showTextEditor({ type: 'comment', id: annotationId });
+  };
+
   Dispatcher.prototype.notifyLogin = function ( data ) {
     crayon.windowManager.removeWindow( crayon.windowManager.windows.authView );
 
     return crayon.windowManager.messageWindows(
       crayon.constants.CourierConstants.POST_LOGIN,
+      data
+    );
+  };
+
+  Dispatcher.prototype.notifyCreateComment = function ( data ) {
+    crayon.windowManager.removeWindow( crayon.windowManager.windows.textEditorView );
+
+    return crayon.windowManager.messageWindows(
+      crayon.constants.CourierConstants.POST_CREATE_COMMENT,
       data
     );
   };

@@ -3,6 +3,7 @@ crayon.mediators || ( crayon.mediators = {} );
 crayon.mediators.Courier = ( function () {
 
   function Courier  () {
+    this.receivePackage = this.receivePackage.bind( this );
     this.delegateEvents();
   };
 
