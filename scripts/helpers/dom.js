@@ -3,7 +3,6 @@ crayon.helpers.dom = {};
 
 ( function ( namespace ) {
 
-  // TODO: Add spec
   namespace.isChildOf = function ( parent, child ) {
     var children = parent.querySelectorAll( '*' );
     return crayon.helpers.utility.includes( children, child );

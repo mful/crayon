@@ -46,8 +46,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.addAnnotation = function ( annotation ) {
-    var injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
-    return injector.inject();
+    crayon.windowManager.handleAddAnnotation( annotation );
   };
 
   Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
@@ -111,6 +110,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.showComments = function ( data ) {
+    crayon.windowManager.showCreateWidget( data.annotation );
     return crayon.windowManager.showCommentsBubble( data );
   };
 

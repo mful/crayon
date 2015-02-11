@@ -8,6 +8,33 @@ describe( 'crayon.coordinators.WindowManager', function () {
     delete this.coordinator;
   });
 
+  describe( '#handleAddAnnotation', function () {
+
+    beforeEach( function () {
+      spyOn( this.coordinator, 'showTextEditor' )
+    });
+
+    describe( 'when there is an active annotation bubble', function () {
+
+      beforeEach( function () {
+        var activeWindow = {},
+            annotation = {attributes: {id: 1}};
+        this.coordinator.activeWindow = activeWindow;
+        this.coordinator.windows.annotationBubble = activeWindow;
+
+        this.coordinator.handleAddAnnotation( annotation )
+      });
+
+      it( 'should open the text editor', function () {
+        expect( this.coordinator.showTextEditor ).toHaveBeenCalled();
+      });
+    });
+
+    describe( 'when needing to create a new annotation', function () {
+      // stub
+    });
+  });
+
   describe( '#handleMouseup', function () {
     describe( 'when there is an active annotation bubble', function () {
 
@@ -29,7 +56,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
         delete this.view;
       });
 
-      describe( 'when the mouseup occurs outside of the active view', function () {
+      describe( 'when the mouseup occurs outside of a crayon view', function () {
 
         beforeEach( function () {
           this.coordinator.handleMouseup({ target: document.createElement('div') });
@@ -44,15 +71,10 @@ describe( 'crayon.coordinators.WindowManager', function () {
         });
       });
 
-      describe( 'when the mouseup occurs on the active window element', function () {
+      describe( 'when the mouseup occurs on a crayon view element', function () {
 
         beforeEach( function () {
-          var activeView = {
-            element: document.createElement( 'div' )
-          };
-          this.coordinator.activeWindow = activeView;
-
-          this.coordinator.handleMouseup({target: activeView.element})
+          this.coordinator.handleMouseup({target: this.coordinator.windows.annotationBubble.element})
         });
 
         it( 'should do nothing', function () {
@@ -60,17 +82,14 @@ describe( 'crayon.coordinators.WindowManager', function () {
         });
       });
 
-      describe( 'when the mouseup occurs on a child element of the active window element', function () {
+      describe( 'when the mouseup occurs on a child element of a crayon view element', function () {
 
         beforeEach( function () {
           var el = document.createElement( 'div' ),
-              child = document.createElement( 'span' ),
-              activeView;
+              child = document.createElement( 'span' );
 
           el.appendChild( child );
-
-          activeView = {element: el};
-          this.coordinator.activeWindow = activeView;
+          this.coordinator.windows.annotationBubble.element.appendChild( el );
 
           this.coordinator.handleMouseup({target: child})
         });
@@ -102,6 +121,19 @@ describe( 'crayon.coordinators.WindowManager', function () {
     });
 
     describe( 'when the AddAnnotation widget does not exist', function () {
+      it( 'should return null', function () {
+        expect( this.coordinator.maybeHideWidget() ).toEqual( null );
+      });
+    });
+
+    describe( 'and there is an active annotation bubble', function () {
+
+      beforeEach( function () {
+        var activeWindow = {};
+        this.coordinator.activeWindow = activeWindow;
+        this.coordinator.windows.annotationBubble = activeWindow;
+      });
+
       it( 'should return null', function () {
         expect( this.coordinator.maybeHideWidget() ).toEqual( null );
       });

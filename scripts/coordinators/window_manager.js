@@ -7,20 +7,38 @@ crayon.coordinators.WindowManager = ( function () {
     this.windows = {};
   };
 
+  WindowManager.prototype.handleAddAnnotation = function ( annotation ) {
+    var injector;
+
+    if( this.activeWindow && this.activeWindow === this.windows.annotationBubble ) {
+      this.showTextEditor({ type: 'comment', id: annotation.attributes.id });
+    } else {
+      injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
+      return injector.inject();
+    }
+  }
+
   WindowManager.prototype.handleMouseup = function ( event ) {
-    if ( this.activeWindow &&
-        ( event.target === this.activeWindow.element ||
-          crayon.helpers.dom.isChildOf(this.activeWindow.element, event.target) )
-    ) return;
+    var keys = Object.keys( this.windows ), i;
+
+    for( i = 0; i < keys.length; i++ ) {
+      if ( !this.windows[keys[i]] ) continue;
+
+      if ( event.target === this.windows[keys[i]].element ||
+           crayon.helpers.dom.isChildOf(this.windows[keys[i]].element, event.target) )
+        return;
+    };
 
     if ( this.windows.annotationBubble ) {
-      this.windows.annotationBubble.remove();
-      this.windows.annotationBubble = null;
+      this.removeWindow( this.windows.annotationBubble );
     }
   };
 
   WindowManager.prototype.maybeHideWidget = function () {
-    if ( !this.windows.createWidget ) return null;
+    if (
+        !this.windows.createWidget ||
+        ( this.activeWindow && this.activeWindow === this.windows.annotationBubble )
+    ) return null;
 
     // TODO: add check for widget activeness before hiding
     return this.windows.createWidget.hide();
