@@ -22,7 +22,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
         this.coordinator.activeWindow = activeWindow;
         this.coordinator.windows.annotationBubble = activeWindow;
 
-        this.coordinator.handleAddAnnotation( annotation )
+        this.coordinator.handleAddAnnotation({ annotation: annotation, type: 'comment' })
       });
 
       it( 'should open the text editor', function () {

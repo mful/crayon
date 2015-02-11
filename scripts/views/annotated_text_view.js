@@ -56,9 +56,10 @@ crayon.views.AnnotatedTextView = ( function () {
 
   // event handlers
 
+  // TODO: update spec for if ( !this.model.attributes.id ) return;
   AnnotatedTextView.prototype.showAnnotation = function ( e ) {
     e.stopPropagation();
-    console.log( 'show annotation' );
+    if ( !this.model.attributes.id ) return;
 
     // dispatch event, along with element and xy coords to inject frame
     // needs to consider scroll position (display upper of lower?)

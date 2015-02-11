@@ -41,7 +41,7 @@ crayon.dispatchers.Dispatcher = ( function () {
         _this.manageWindows( payload.data );
         break;
       case crayon.constants.AnnotationConstants.ADD_ANNOTATION:
-        _this.addAnnotation( payload.data );
+        _this.addNewAnnotation( payload.data );
         break;
       case crayon.constants.WindowConstants.REMOVE_WINDOW:
         _this.removeWindow( payload.data.view );
@@ -51,8 +51,9 @@ crayon.dispatchers.Dispatcher = ( function () {
     return true;
   };
 
-  Dispatcher.prototype.addAnnotation = function ( annotation ) {
-    crayon.windowManager.handleAddAnnotation( annotation );
+  Dispatcher.prototype.addNewAnnotation = function ( annotation ) {
+    var type = !!annotation.attributes.id ? 'comment' : 'annotation';
+    crayon.windowManager.handleAddAnnotation({ annotation: annotation, type: type });
   };
 
   Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
@@ -63,7 +64,7 @@ crayon.dispatchers.Dispatcher = ( function () {
       function ( annotations ) {
 
         for ( i = 0; i < annotations.length; i++ ) {
-          _this.addAnnotation( annotations[i] );
+          crayon.windowManager.handleAddAnnotation({ annotation: annotations[i] });
         }
 
         return annotations;
@@ -98,7 +99,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.newComment = function ( annotationId ) {
-    crayon.windowManager.handleAddAnnotation({ attributes: {id: annotationId} });
+    crayon.windowManager.handleAddAnnotation({ type: 'comment', annotation: {attributes: {id: annotationId}} });
   };
 
   Dispatcher.prototype.notifyLogin = function ( data ) {

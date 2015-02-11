@@ -8,38 +8,42 @@ crayon.coordinators.WindowManager = ( function () {
   };
 
   // TODO: Update spec
-  WindowManager.prototype.handleAddAnnotation = function ( annotation ) {
-    var injector;
+  WindowManager.prototype.handleAddAnnotation = function ( data ) {
+    var injector, views;
 
     if ( this.windows.createWidget ) this.windows.createWidget.hide();
 
-    if( this.activeWindow && this.activeWindow === this.windows.annotationBubble ) {
-      this.showTextEditor({type: 'comment', id: annotation.attributes.id});
-    } else if ( !annotation.attributes.id ) {
-      injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
-      views = injector.inject();
-      this.showTextEditor(
-        {
-          type: 'annotation',
-          id: null,
-          urlParams: {
-            text: annotation.attributes.text,
-            url: annotation.attributes.url
+    switch ( data.type ) {
+      case 'comment':
+        this.showTextEditor({type: 'comment', id: data.annotation.attributes.id});
+        break;
+      case 'annotation':
+        injector = new crayon.services.AnnotationInjector( data.annotation, crayon.views.AnnotatedTextView );
+        views = injector.inject();
+        this.showTextEditor(
+          {
+            type: 'annotation',
+            id: null,
+            urlParams: {
+              text: data.annotation.attributes.text,
+              url: data.annotation.attributes.url
+            }
           }
-        }
-      ,
-        {annotatedTextView: views[0]}
-      );
-    } else {
-      injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
-      injector.inject();
+        ,
+          {annotatedTextView: views[0]}
+        );
+        break;
+      default:
+        injector = new crayon.services.AnnotationInjector( data.annotation, crayon.views.AnnotatedTextView );
+        injector.inject();
+        break
     }
   };
 
   // TODO: add spec
   WindowManager.prototype.handleCreateAnnotation = function ( annotation ) {
-    var highlightView;
-    highlightView = this.windows.textEditorView.annotatedTextView;
+    var highlightView = this.windows.textEditorView.annotatedTextView;
+    highlightView.model = annotation;
 
     this.removeWindow( this.windows.textEditorView );
 
