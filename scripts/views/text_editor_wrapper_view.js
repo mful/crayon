@@ -8,11 +8,12 @@ crayon.views.TextEditorWrapperView = ( function () {
   function TextEditorWrapperView ( params ) {
     this.commentableType = params.commentableType;
     this.commentableId = params.commentableId;
+    this.annotatedTextView = params.annotatedTextView
 
     this.element = assembleTemplate();
     this.iframe = this.element.querySelector( 'iframe' );
 
-    this.iframe.src = this.iframeSrc( this.commentableType, this.commentableId );
+    this.iframe.src = this.iframeSrc( this.commentableType, this.commentableId, params.urlParams );
 
     this.notifyRemove = this.notifyRemove.bind( this );
   };
@@ -42,8 +43,13 @@ crayon.views.TextEditorWrapperView = ( function () {
     });
   };
 
-  TextEditorWrapperView.prototype.iframeSrc = function ( type, id ) {
+  // TODO: add spec for annotation case
+  TextEditorWrapperView.prototype.iframeSrc = function ( type, id, params ) {
+    params || ( params = {}
+     );
     switch ( type ) {
+      case 'annotation':
+        return crayon.helpers.routes.new_annotation_url( params );
       case 'comment':
         return crayon.helpers.routes.new_annotation_comment_url( id );
       case 'reply':

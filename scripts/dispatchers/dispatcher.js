@@ -22,6 +22,9 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.CourierConstants.POST_LOGIN:
         _this.notifyLogin( payload.data );
         break;
+      case crayon.constants.CourierConstants.POST_CREATE_ANNOTATION:
+        _this.handleCreateAnnotation( payload.data.annotation );
+        break;
       case crayon.constants.CourierConstants.POST_CREATE_COMMENT:
         _this.notifyCreateComment( payload.data );
         break;
@@ -63,6 +66,11 @@ crayon.dispatchers.Dispatcher = ( function () {
         return annotations;
       }
     )
+  };
+
+  Dispatcher.prototype.handleCreateAnnotation = function ( annotation ) {
+    var model = new crayon.models.Annotation( annotation );
+    return crayon.windowManager.handleCreateAnnotation( model );
   };
 
   Dispatcher.prototype.manageWindows = function ( event ) {

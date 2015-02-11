@@ -46,9 +46,10 @@ crayon.services.AnnotationInjector = ( function () {
   // private
 
   AnnotationInjector.prototype._createViews = function ( nodeSets ) {
-    var _this = this;
+    var _this = this,
+        sets = crayon.helpers.utility.compact( nodeSets );
 
-    return crayon.helpers.utility.compact( nodeSets ).map(
+    return sets.map(
       function ( nodeSet ) {
         return new _this.view( _this.model, nodeSet ).render();
       }

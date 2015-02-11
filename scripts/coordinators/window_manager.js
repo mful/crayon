@@ -12,11 +12,40 @@ crayon.coordinators.WindowManager = ( function () {
 
     if( this.activeWindow && this.activeWindow === this.windows.annotationBubble ) {
       this.showTextEditor({ type: 'comment', id: annotation.attributes.id });
+    } else if ( !annotation.attributes.id ) {
+      injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
+      views = injector.inject();
+      this.showTextEditor(
+        {
+          type: 'annotation',
+          id: null,
+          urlParams: {
+            text: annotation.attributes.text,
+            url: annotation.attributes.url
+          }
+        }
+      ,
+        {annotatedTextView: views[0]}
+      );
     } else {
       injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
-      return injector.inject();
+      injector.inject();
     }
-  }
+  };
+
+  // TODO: add spec
+  WindowManager.prototype.handleCreateAnnotation = function ( annotation ) {
+    var highlightView;
+    highlightView = this.windows.textEditorView.annotatedTextView;
+
+    this.removeWindow( this.windows.textEditorView );
+
+    return this.showCommentsBubble({
+      element: highlightView.elements[0],
+      view: highlightView,
+      annotation: annotation
+    });
+  };
 
   WindowManager.prototype.handleMouseup = function ( event ) {
     var keys = Object.keys( this.windows ), i;
@@ -102,7 +131,10 @@ crayon.coordinators.WindowManager = ( function () {
     return this.windows.createWidget.render( annotation );
   };
 
-  WindowManager.prototype.showTextEditor = function ( data ) {
+  // Update spec to account for options
+  WindowManager.prototype.showTextEditor = function ( data, options ) {
+    options || ( options = {} );
+
     if ( this.windows.textEditorView ) {
       if (
           this.windows.textEditorView.commentableType === data.type &&
@@ -117,7 +149,9 @@ crayon.coordinators.WindowManager = ( function () {
 
     this.windows.textEditorView = new crayon.views.TextEditorWrapperView({
       commentableType: data.type,
-      commentableId: data.id
+      commentableId: data.id,
+      urlParams: data.urlParams,
+      annotatedTextView: options.annotatedTextView
     });
 
     this.setActive( this.windows.textEditorView );

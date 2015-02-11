@@ -85,6 +85,7 @@ crayon.views.AnnotatedTextView = ( function () {
     }
   };
 
+  // TODO: add test for when first && last, and node follows closing node, but does not start with punctuation
   AnnotatedTextView.prototype._createModifiedNode = function ( nodeData, first, last ) {
     var div = document.createElement('div'),
         frag = document.createDocumentFragment(),
@@ -93,7 +94,7 @@ crayon.views.AnnotatedTextView = ( function () {
 
     if ( first && last ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( "([.!?]\\s+|^)(" + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + ")(\\s|$)" ),
+        new RegExp( "([.!?]\\s+|^\\s+|^)(" + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + ")(\\s|$)" ),
         '$1' + openTag + '$2</span>$3'
       );
     } else if ( first ) {
