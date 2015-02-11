@@ -29,6 +29,19 @@ crayon.views.AnnotatedTextView = ( function () {
     return this;
   };
 
+  // TODO: add spec
+  AnnotatedTextView.prototype.remove = function () {
+    var i, frag;
+
+    for ( i = 0; i < this.elements.length; i++ ) {
+      frag = document.createDocumentFragment();
+      frag.appendChild( this.elements[i].childNodes[0] );
+      this.elements[i].parentElement.replaceChild( frag, this.elements[i] );
+    }
+
+    return this;
+  };
+
   AnnotatedTextView.prototype.delegateEvents = function () {
     for ( var i = 0; i < this.elements.length; i++ ) {
       ev( this.elements[i] ).on( 'click', this.showAnnotation );

@@ -13,6 +13,9 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.AnnotationConstants.NEW_ANNOTATION:
         _this.newAnnotation( payload.data );
         break;
+      case crayon.constants.CommentConstants.CANCEL_COMMENT:
+        _this.handleCancelComment( payload.data.view );
+        break;
       case crayon.constants.CommentConstants.NEW_COMMENT:
         _this.newComment( payload.data.annotation_id );
         break;
@@ -68,6 +71,13 @@ crayon.dispatchers.Dispatcher = ( function () {
     )
   };
 
+  // TODO: add spec or move to windowManager and add spec thereg
+  Dispatcher.prototype.handleCancelComment = function ( view ) {
+    if ( view.annotatedTextView && !view.annotatedTextView.model.attributes.id )
+        view.annotatedTextView.remove();
+    return this.removeWindow( view );
+  };
+
   Dispatcher.prototype.handleCreateAnnotation = function ( annotation ) {
     var model = new crayon.models.Annotation( annotation );
     return crayon.windowManager.handleCreateAnnotation( model );
@@ -88,7 +98,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.newComment = function ( annotationId ) {
-    crayon.windowManager.showTextEditor({ type: 'comment', id: annotationId });
+    crayon.windowManager.handleAddAnnotation({ attributes: {id: annotationId} });
   };
 
   Dispatcher.prototype.notifyLogin = function ( data ) {

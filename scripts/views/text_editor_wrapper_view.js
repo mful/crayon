@@ -38,7 +38,7 @@ crayon.views.TextEditorWrapperView = ( function () {
 
   TextEditorWrapperView.prototype.notifyRemove = function () {
     crayon.dispatcher.dispatch({
-      message: crayon.constants.WindowConstants.REMOVE_WINDOW,
+      message: crayon.constants.CommentConstants.CANCEL_COMMENT,
       data: {view: this}
     });
   };

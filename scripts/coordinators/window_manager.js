@@ -7,11 +7,14 @@ crayon.coordinators.WindowManager = ( function () {
     this.windows = {};
   };
 
+  // TODO: Update spec
   WindowManager.prototype.handleAddAnnotation = function ( annotation ) {
     var injector;
 
+    if ( this.windows.createWidget ) this.windows.createWidget.hide();
+
     if( this.activeWindow && this.activeWindow === this.windows.annotationBubble ) {
-      this.showTextEditor({ type: 'comment', id: annotation.attributes.id });
+      this.showTextEditor({type: 'comment', id: annotation.attributes.id});
     } else if ( !annotation.attributes.id ) {
       injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
       views = injector.inject();
