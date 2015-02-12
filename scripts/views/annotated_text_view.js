@@ -54,6 +54,18 @@ crayon.views.AnnotatedTextView = ( function () {
     return this._boundingCoordinates( this.elements );
   };
 
+  AnnotatedTextView.prototype.setActive = function ( active ) {
+    if ( this.active === active ) return;
+    var i,
+        func = active ? crayon.helpers.utility.addClass : crayon.helpers.utility.removeClass;
+
+    for ( i = 0; i < this.elements.length; i++ ) {
+      func( this.elements[i], 'crayon-active' )
+    }
+
+    return this;
+  };
+
   // event handlers
 
   // TODO: update spec for if ( !this.model.attributes.id ) return;

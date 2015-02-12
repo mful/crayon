@@ -2,4 +2,8 @@
   background: $purple_trans;
   cursor: pointer;
   position: relative;
+
+  &.crayon-active {
+    background: $purple_trans_dark;
+  }
 }

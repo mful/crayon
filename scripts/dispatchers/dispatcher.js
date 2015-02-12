@@ -63,19 +63,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
-    var _this = this;
-
-    return crayon.models.Annotation.fetchAllForPage(
-      crayon.helpers.url.currentHref(),
-      function ( annotations ) {
-
-        for ( i = 0; i < annotations.length; i++ ) {
-          crayon.windowManager.handleAddAnnotation({ annotation: annotations[i] });
-        }
-
-        return annotations;
-      }
-    )
+    return crayon.annotatedTextManager.showAllOnPage( crayon.helpers.url.currentHref() );
   };
 
   // TODO: add spec or move to windowManager and add spec thereg

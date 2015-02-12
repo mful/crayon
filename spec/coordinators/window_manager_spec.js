@@ -2,6 +2,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
   beforeEach( function () {
     this.coordinator = new crayon.coordinators.WindowManager();
+    crayon.annotatedTextManager = new crayon.coordinators.AnnotatedTextManager();
   });
 
   afterEach( function () {
@@ -168,20 +169,40 @@ describe( 'crayon.coordinators.WindowManager', function () {
       this.coordinator.windows.annotationBubble = this.view;
 
       spyOn( this.view, 'remove' );
-
-      this.coordinator.removeWindow( this.view );
+      spyOn( crayon.annotatedTextManager, 'deactivateAnnotations' );
     });
 
-    it( 'should null out the active window', function () {
-      expect( this.coordinator.activeWindow ).toEqual( null );
+    describe( 'when its the only window open', function () {
+      beforeEach( function () {
+        this.coordinator.removeWindow( this.view );
+      });
+
+      it( 'should null out the active window', function () {
+        expect( this.coordinator.activeWindow ).toEqual( null );
+      });
+
+      it( 'should remove the view', function () {
+        expect( this.view.remove ).toHaveBeenCalled();
+      });
+
+      it( 'should null out the reference to the window in window manager', function () {
+        expect( this.coordinator.windows.annotationBubble ).toEqual(  null );
+      });
+
+      it( 'should deactivate annotations', function () {
+        expect( crayon.annotatedTextManager.deactivateAnnotations ).toHaveBeenCalled();
+      });
+    })
+
+    describe( 'when there are other windows', function () {
+
+      beforeEach( function () {
+        this.coordinator.windows.textEditorView = {};
+      });
     });
 
-    it( 'should remove the view', function () {
-      expect( this.view.remove ).toHaveBeenCalled();
-    });
-
-    it( 'should null out the reference to the window in window manager', function () {
-      expect( this.coordinator.windows.annotationBubble ).toEqual(  null );
+    it( 'should not deactivate annotations a relevant window is active', function () {
+      expect( crayon.annotatedTextManager.deactivateAnnotations ).not.toHaveBeenCalled();
     });
   });
 
@@ -214,7 +235,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
     it( 'should set the new authView as active', function () {
       expect( this.coordinator.activeWindow ).toEqual( this.newView );
-    })
+    });
   });
 
   describe( '#showCommentsBubble', function () {
@@ -232,6 +253,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
         spyOn( crayon.views, 'AnnotationBubbleWrapperView' ).and.returnValue( this.childView );
         spyOn( this.view, 'remove' );
         spyOn( this.childView, 'render' ).and.returnValue( this.childView );
+        spyOn( crayon.annotatedTextManager, 'activateAnnotation' );
 
         this.coordinator.showCommentsBubble( data );
       });
@@ -251,6 +273,10 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
       it( 'should set the new view as the active window', function () {
         expect( this.childView ).toEqual( this.coordinator.activeWindow );
+      });
+
+      it( 'should activate the annotation', function () {
+        expect( crayon.annotatedTextManager.activateAnnotation ).toHaveBeenCalled();
       });
     });
   });

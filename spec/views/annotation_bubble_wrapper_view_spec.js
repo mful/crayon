@@ -197,15 +197,15 @@ describe( 'crayon.views.AnnotationBubbleWrapperView', function () {
       var bounds = {top: 500, bottom: 600};
 
       it( 'should return the bubbles height times -1', function () {
-        expect( this.view._cssTopVal(bounds) ).toEqual( -272 );
+        expect( this.view._cssTopVal(bounds) ).toEqual( -274 );
       });
     });
 
     describe( 'when there isnt quite room to show the whole bubble above the text', function () {
-      var bounds = {top: 253, bottom: 600};
+      var bounds = {top: 255, bottom: 600};
 
       it( 'should still return the bubbles height times -1, placing it above the text', function () {
-        expect( this.view._cssTopVal(bounds) ).toEqual( -272 );
+        expect( this.view._cssTopVal(bounds) ).toEqual( -274 );
       });
     });
 

@@ -6,7 +6,7 @@ crayon.views.AnnotationBubbleWrapperView = ( function () {
   AnnotationBubbleWrapperView.prototype.className = 'crayon-annotation-bubble-wrapper-view crayon-window';
   var MAX_WIDTH = 762,
       MIN_WIDTH = 572
-      HEIGHT = 272;
+      HEIGHT = 274;
 
   function AnnotationBubbleWrapperView ( data ) {
     this.parent = data.element;

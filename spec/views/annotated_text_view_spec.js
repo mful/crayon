@@ -34,6 +34,34 @@ describe( 'crayon.views.AnnotatedTextView', function () {
     this.view = new crayon.views.AnnotatedTextView( this.annotation, this.nodes );
   });
 
+  describe( '#setActive', function () {
+
+    beforeEach( function () {
+      this.view.render();
+      spyOn( crayon.helpers.utility, 'addClass' );
+      spyOn( crayon.helpers.utility, 'removeClass' );
+    });
+
+    afterEach( function () {
+      this.view.remove();
+    });
+
+    describe( 'when activating the annotated view', function () {
+      it( 'should add the class', function () {
+        this.view.setActive( true );
+        expect( crayon.helpers.utility.addClass.calls.count() ).toEqual( this.nodes.length );
+      });
+    });
+
+    describe( 'when deactivating a view', function () {
+      it( 'should remove the class', function () {
+        this.view.active = true;
+        this.view.setActive( false );
+        expect( crayon.helpers.utility.removeClass.calls.count() ).toEqual( this.nodes.length );
+      });
+    });
+  });
+
   describe( '#_boundingCoordinates', function () {
 
     beforeEach( function () {

@@ -9,7 +9,7 @@ crayon.coordinators.WindowManager = ( function () {
 
   // TODO: Update spec
   WindowManager.prototype.handleAddAnnotation = function ( data ) {
-    var injector, views;
+    var views;
 
     if ( this.windows.createWidget ) this.windows.createWidget.hide();
 
@@ -18,8 +18,7 @@ crayon.coordinators.WindowManager = ( function () {
         this.showTextEditor({type: 'comment', id: data.annotation.attributes.id});
         break;
       case 'annotation':
-        injector = new crayon.services.AnnotationInjector( data.annotation, crayon.views.AnnotatedTextView );
-        views = injector.inject();
+        views = crayon.annotatedTextManager.injectAnnotation( data.annotation );
         this.showTextEditor(
           {
             type: 'annotation',
@@ -33,11 +32,9 @@ crayon.coordinators.WindowManager = ( function () {
           {annotatedTextView: views[0]}
         );
         break;
-      default:
-        injector = new crayon.services.AnnotationInjector( data.annotation, crayon.views.AnnotatedTextView );
-        injector.inject();
-        break
     }
+
+    crayon.annotatedTextManager.activateAnnotation( data.annotation );
   };
 
   // TODO: add spec
@@ -78,13 +75,11 @@ crayon.coordinators.WindowManager = ( function () {
         return;
     };
 
-    if ( this.windows.annotationBubble ) {
+    if ( this.windows.annotationBubble )
       this.removeWindow( this.windows.annotationBubble );
-    }
 
-    if ( this.windows.sidebar ) {
+    if ( this.windows.sidebar )
       this.removeWindow( this.windows.sidebar );
-    }
   };
 
   WindowManager.prototype.maybeHideWidget = function () {
@@ -111,13 +106,17 @@ crayon.coordinators.WindowManager = ( function () {
     var keys = Object.keys( this.windows ), i;
     if ( this.activeWindow === view ) this.activeWindow = null;
 
+
     for ( i = 0; i < keys.length; i++ ) {
       if ( this.windows[keys[i]] === view ) {
         this.windows[keys[i]].remove()
         this.windows[keys[i]] = null;
-        return;
+        break;
       }
     }
+
+    if ( !this.windows.annotationBubble && !this.windows.textEditorView )
+        crayon.annotatedTextManager.deactivateAnnotations();
   };
 
   WindowManager.prototype.showAuth = function ( referringAction ) {
@@ -144,6 +143,7 @@ crayon.coordinators.WindowManager = ( function () {
       new crayon.views.AnnotationBubbleWrapperView( data ).render();
 
     this.setActive( this.windows.annotationBubble );
+    crayon.annotatedTextManager.activateAnnotation( data.annotation );
 
     return this.windows.annotationBubble;
   };
