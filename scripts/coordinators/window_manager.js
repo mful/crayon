@@ -142,12 +142,13 @@ crayon.coordinators.WindowManager = ( function () {
   WindowManager.prototype.showTextEditor = function ( data, options ) {
     options || ( options = {} );
 
+    if ( this.windows.createWidget ) this.windows.createWidget.hide();
+
     if ( this.windows.textEditorView ) {
       if (
           this.windows.textEditorView.commentableType === data.type &&
           this.windows.textEditorView.commentableId === data.id
       ) {
-        // show v hide?
         return;
       } else {
         this.windows.textEditorView.remove();

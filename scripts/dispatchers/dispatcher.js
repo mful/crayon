@@ -16,6 +16,9 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.CommentConstants.CANCEL_COMMENT:
         _this.handleCancelComment( payload.data.view );
         break;
+      case crayon.constants.CommentConstants.NEW_REPLY:
+        _this.newReply( payload.data.comment_id );
+        break;
       case crayon.constants.CommentConstants.NEW_COMMENT:
         _this.newComment( payload.data.annotation_id );
         break;
@@ -100,6 +103,10 @@ crayon.dispatchers.Dispatcher = ( function () {
 
   Dispatcher.prototype.newComment = function ( annotationId ) {
     crayon.windowManager.handleAddAnnotation({ type: 'comment', annotation: {attributes: {id: annotationId}} });
+  };
+
+  Dispatcher.prototype.newReply = function ( commentId ) {
+    crayon.windowManager.showTextEditor({ type: 'reply', id: commentId });
   };
 
   Dispatcher.prototype.notifyLogin = function ( data ) {

@@ -32,6 +32,12 @@ crayon.helpers.routes = {};
       crayon.helpers.url.toQueryStr( params );
   };
 
+
+  // TODO: Add spec
+  namespace.new_reply_url = function ( id ) {
+    return urlRoot() + '/comments/' + id + '/replies/new'
+  };
+
   namespace.signup_url = function ( params ) {
     params || ( params = {} );
     return urlRoot() + '/signup?' + crayon.helpers.url.toQueryStr( params );

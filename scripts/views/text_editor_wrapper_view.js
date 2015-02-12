@@ -53,8 +53,7 @@ crayon.views.TextEditorWrapperView = ( function () {
       case 'comment':
         return crayon.helpers.routes.new_annotation_comment_url( id );
       case 'reply':
-        // stub
-        return '';
+        return crayon.helpers.routes.new_reply_url( id );
       default:
         return null;
     }
