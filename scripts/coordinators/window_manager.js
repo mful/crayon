@@ -41,6 +41,19 @@ crayon.coordinators.WindowManager = ( function () {
   };
 
   // TODO: add spec
+  WindowManager.prototype.handleCreateComment = function ( data ) {
+    this.removeWindow( crayon.windowManager.windows.textEditorView );
+    if ( !this.windows.sidebar && !data.comment.annotation_id ) {
+      this.showRepliesSidebar( data.comment.parent_comment_id )
+    }
+
+    return crayon.windowManager.messageWindows(
+      crayon.constants.CourierConstants.POST_CREATE_COMMENT,
+      data
+    );
+  }
+
+  // TODO: add spec
   WindowManager.prototype.handleCreateAnnotation = function ( annotation ) {
     var highlightView = this.windows.textEditorView.annotatedTextView;
     highlightView.model = annotation;
@@ -67,6 +80,10 @@ crayon.coordinators.WindowManager = ( function () {
 
     if ( this.windows.annotationBubble ) {
       this.removeWindow( this.windows.annotationBubble );
+    }
+
+    if ( this.windows.sidebar ) {
+      this.removeWindow( this.windows.sidebar );
     }
   };
 
@@ -136,6 +153,15 @@ crayon.coordinators.WindowManager = ( function () {
       this.windows.createWidget = new crayon.views.AddAnnotationView();
 
     return this.windows.createWidget.render( annotation );
+  };
+
+  WindowManager.prototype.showRepliesSidebar = function ( commentId ) {
+    if ( this.windows.sidebar ) this.removeWindow( this.windows.sidebar );
+
+    this.windows.sidebar = new crayon.views.SidebarWrapperView({ commentId: commentId });
+    this.setActive( this.windows.sidebar );
+
+    return this.windows.sidebar.render();
   };
 
   // Update spec to account for options

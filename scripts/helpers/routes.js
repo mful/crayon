@@ -38,6 +38,10 @@ crayon.helpers.routes = {};
     return urlRoot() + '/comments/' + id + '/replies/new'
   };
 
+  namespace.replies_url = function ( id ) {
+    return urlRoot() + '/comments/' + id + '/replies';
+  };
+
   namespace.signup_url = function ( params ) {
     params || ( params = {} );
     return urlRoot() + '/signup?' + crayon.helpers.url.toQueryStr( params );

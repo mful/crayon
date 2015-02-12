@@ -1,0 +1,15 @@
+.crayon-sidebar-wrapper-view {
+  background: $paper;
+  border-left: solid $paper_dark 1px;
+  bottom: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 300px;
+
+  iframe {
+    border: none;
+    height: 100%;
+    width: 100%;
+  }
+}

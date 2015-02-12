@@ -25,6 +25,9 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.CommentConstants.SHOW_COMMENTS:
         _this.showComments( payload.data );
         break;
+      case crayon.constants.CommentConstants.SHOW_REPLIES:
+        _this.showReplies( payload.data.comment_id );
+        break;
       case crayon.constants.CourierConstants.POST_LOGIN:
         _this.notifyLogin( payload.data );
         break;
@@ -119,12 +122,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.notifyCreateComment = function ( data ) {
-    crayon.windowManager.removeWindow( crayon.windowManager.windows.textEditorView );
-
-    return crayon.windowManager.messageWindows(
-      crayon.constants.CourierConstants.POST_CREATE_COMMENT,
-      data
-    );
+    crayon.windowManager.handleCreateComment( data )
   };
 
   Dispatcher.prototype.promptAuth = function ( data ) {
@@ -138,6 +136,10 @@ crayon.dispatchers.Dispatcher = ( function () {
   Dispatcher.prototype.showComments = function ( data ) {
     crayon.windowManager.showCreateWidget( data.annotation );
     return crayon.windowManager.showCommentsBubble( data );
+  };
+
+  Dispatcher.prototype.showReplies = function ( commentId ) {
+    return crayon.windowManager.showRepliesSidebar( commentId );
   };
 
   return Dispatcher;
