@@ -1,7 +1,8 @@
 crayon.models || ( crayon.models = {} );
 
 crayon.models.Annotation = ( function () {
-  MIN_FRAGMENT_LENGTH = 10;
+  var MIN_FRAGMENT_LENGTH = 10,
+      MAX_TEXT_LENGTH = 400;
 
   Annotation.createFromSelection = function ( selection ) {
     var annotation = new Annotation();
@@ -36,7 +37,14 @@ crayon.models.Annotation = ( function () {
 
     this.attributes = crayon.helpers.utility.merge( this.defaults, attributes );
     this.cid = crayon.helpers.utility.uniqueId( 'annotation_' );
+    this.errors = [];
+
     this.toQueryStr = this.toQueryStr.bind( this );
+  };
+
+  Annotation.prototype.isValid = function () {
+    if ( this.errors.length < 1 ) this.validate();
+    return this.errors.length < 1 ? true : false;
   };
 
   Annotation.prototype.parseText = function ( selection ) {
@@ -59,6 +67,21 @@ crayon.models.Annotation = ( function () {
       text: this.attributes.text,
       url: this.attributes.url
     });
+  };
+
+  Annotation.prototype.validate = function () {
+    var overage = this.attributes.text.length - MAX_TEXT_LENGTH;
+
+    if ( this.attributes.text.length > MAX_TEXT_LENGTH ) {
+      this.errors.push(
+        "The highlighted text is " + overage + " characters too long.\n\n" +
+        "To avoid annotations that are only different by a couple words, " +
+        "annotations are limited to full sentences (don't worry -- Scribble " +
+        "automatically expands the highlighted text to full sentences). After " +
+        "expanding to full sentences, the selected text was " + overage + " " +
+        "characters over the " + MAX_TEXT_LENGTH + " character limit."
+      )
+    }
   };
 
   // private helpers

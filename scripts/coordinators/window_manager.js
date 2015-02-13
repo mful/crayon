@@ -13,6 +13,12 @@ crayon.coordinators.WindowManager = ( function () {
 
     if ( this.windows.createWidget ) this.windows.createWidget.hide();
 
+    if ( !data.annotation.isValid() ) {
+      errors = data.annotation.errors.join("\n- ");
+      alert( ":( We can't annotate the highlighted text.\n\n- " + errors );
+      return;
+    }
+
     switch ( data.type ) {
       case 'comment':
         this.showTextEditor({type: 'comment', id: data.annotation.attributes.id});

@@ -19,7 +19,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
       beforeEach( function () {
         var activeWindow = {},
-            annotation = {attributes: {id: 1}};
+            annotation = {attributes: {id: 1}, isValid: function () {return true}};
         this.coordinator.activeWindow = activeWindow;
         this.coordinator.windows.annotationBubble = activeWindow;
 

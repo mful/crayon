@@ -97,6 +97,26 @@ describe( 'crayon.models.Annotation', function () {
     });
   });
 
+  describe( '#isValid', function () {
+    describe( 'when the annotation is not valid', function () {
+
+      beforeEach( function () {
+        // 401 characters
+        this.annotation.attributes.text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+      });
+
+      it( 'should return false', function () {
+        expect( this.annotation.isValid() ).toEqual( false );
+      });
+    });
+
+    describe( 'when the annotation is valid', function () {
+      it( 'should return true', function () {
+        expect( this.annotation.isValid() ).toEqual( true );
+      });
+    });
+  });
+
   describe( '#parseText', function () {
 
     // one, sweeping integration test
@@ -180,6 +200,28 @@ describe( 'crayon.models.Annotation', function () {
     it( 'should serialize the annotation text and page url', function () {
       expect( this.annotation.toQueryStr() ).toEqual( 'text=We%20are%20not%20descended%20from%20fearful%20men.&url=https%3A%2F%2Fhogwarts.com' )
     })
+  });
+
+  describe( '#validate', function () {
+    describe( 'when the annotation is valid', function () {
+      it( 'should not add any errors', function () {
+        this.annotation.validate();
+        expect( this.annotation.errors.length ).toEqual( 0 );
+      });
+    });
+
+    describe( 'when the annotation text is too long', function () {
+
+      beforeEach( function () {
+        // 401 characters
+        this.annotation.attributes.text = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        this.annotation.validate();
+      })
+
+      it( 'should add an error', function () {
+        expect( this.annotation.errors.length ).toEqual( 1 );
+      });
+    });
   });
 
   describe( '#_assembleAnnotationSentences', function () {
