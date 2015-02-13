@@ -9,21 +9,25 @@ describe( 'crayon.coordinators.WindowManager', function () {
     delete this.coordinator;
   });
 
-  describe( '#handleAddAnnotation', function () {
+  describe( '#handleAddNewAnnotation', function () {
 
     beforeEach( function () {
-      spyOn( this.coordinator, 'showTextEditor' )
+      this.annotation = {attributes: {id: 1}, isValid: function () {}};
+
+      spyOn( crayon.annotatedTextManager, 'injectAnnotation' ).and.returnValue( [] );
+      spyOn( this.coordinator, 'showTextEditor' );
     });
 
-    describe( 'when there is an active annotation bubble', function () {
+    describe( 'when the annotation is valid', function () {
 
       beforeEach( function () {
-        var activeWindow = {},
-            annotation = {attributes: {id: 1}, isValid: function () {return true}};
-        this.coordinator.activeWindow = activeWindow;
-        this.coordinator.windows.annotationBubble = activeWindow;
+        spyOn( this.annotation, 'isValid' ).and.returnValue( true );
 
-        this.coordinator.handleAddAnnotation({ annotation: annotation, type: 'comment' })
+        this.coordinator.handleAddNewAnnotation( this.annotation );
+      });
+
+      it( 'should inject the annotation', function () {
+        expect( crayon.annotatedTextManager.injectAnnotation ).toHaveBeenCalled();
       });
 
       it( 'should open the text editor', function () {
@@ -31,8 +35,28 @@ describe( 'crayon.coordinators.WindowManager', function () {
       });
     });
 
-    describe( 'when needing to create a new annotation', function () {
-      // stub
+    describe( 'when the annotation is NOT valid', function () {
+
+      beforeEach( function () {
+        this.annotation.errors = [];
+
+        spyOn( this.annotation, 'isValid' ).and.returnValue( false );
+        spyOn( window, 'alert' );
+
+        this.coordinator.handleAddNewAnnotation( this.annotation );
+      });
+
+      it( 'should alert the user', function () {
+        expect( window.alert ).toHaveBeenCalled();
+      });
+
+      it( 'should not inject the annotation', function () {
+        expect( crayon.annotatedTextManager.injectAnnotation ).not.toHaveBeenCalled();
+      });
+
+      it( 'should not open the text editor', function () {
+        expect( this.coordinator.showTextEditor ).not.toHaveBeenCalled();
+      });
     });
   });
 

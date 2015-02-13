@@ -7,7 +7,6 @@ crayon.coordinators.WindowManager = ( function () {
     this.windows = {};
   };
 
-  // TODO: Update spec
   WindowManager.prototype.handleAddNewAnnotation = function ( annotation ) {
     var errors, views;
 
@@ -32,7 +31,7 @@ crayon.coordinators.WindowManager = ( function () {
       {annotatedTextView: views[0]}
     );
 
-    crayon.annotatedTextManager.activateAnnotation( data.annotation );
+    crayon.annotatedTextManager.activateAnnotation( annotation );
   };
 
   // TODO: add spec
