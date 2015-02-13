@@ -40,7 +40,7 @@ crayon.views.AddAnnotationView = ( function () {
   AddAnnotationView.prototype._template = function() {
     var container, contents;
 
-    contents = "<div class='crayon-header'><div class='crayon-caret-wrapper'><div class='crayon-caret-up'></div></div><div class='crayon-title'>Add Annotation</div></div><div class='iframe-wrapper'></div>";
+    contents = "<i class=\"ion-android-add\"></i>";
     container = document.createElement('div');
     container.id = this.id;
     container.className = this.className;

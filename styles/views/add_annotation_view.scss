@@ -1,44 +1,25 @@
-.crayon-add-annotation-view.crayon-widget {
-  border: solid 1px #444;
-  border-bottom: none;
-  border-right: none;
-  bottom: 0;
+.crayon-add-annotation-view {
+  background: $purple;
+  border: solid 1px $purple_dark;
+  bottom: 10px;
+  color: white;
   cursor: pointer;
   height: 50px;
-  font-family: $default_serif_italic;
+  opacity: 0.7;
   position: fixed;
-  right: 0;
-  width: 300px;
+  right: 10px;
+  text-align: center;
+  transition: opacity 300ms ease-out;
+  width: 50px;
   z-index: 999999;
 
-  .crayon-header {
-    background: $purple;
-    color: $white;
-    padding: 5px 10px;
-
-    .crayon-title {
-      display: inline-block;
-      font-size: $size3;
-      line-height: 40px;
-      margin-left: 14px;
-      vertical-align: top;
-    }
+  &:hover {
+    opacity: 1;
   }
 
-  .crayon-caret-wrapper {
-    border-right: solid $grey 1px;
-    display: inline-block;
-    height: 10px;
-    padding: 15px 19px 15px 10px;
-  }
-
-  .crayon-caret-up {
-    border-left: solid 3px $white;
-    border-top: solid 3px $white;
-    border-radius: 2px;
-    float: left;
-    height: 19px;
-    transform: rotate(45deg);
-    width: 19px;
+  i {
+    font-size: 2.37rem;
+    line-height: 52px;
+    vertical-align: middle;
   }
 }
