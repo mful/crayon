@@ -58,8 +58,11 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.addNewAnnotation = function ( annotation ) {
-    var type = !!annotation.attributes.id ? 'comment' : 'annotation';
-    crayon.windowManager.handleAddAnnotation({ annotation: annotation, type: type });
+    if ( !!annotation.attributes.id ) {
+      this.newComment( annotation.attributes.id );
+    } else {
+      crayon.windowManager.handleAddNewAnnotation( annotation );
+    }
   };
 
   Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
@@ -93,7 +96,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.newComment = function ( annotationId ) {
-    crayon.windowManager.handleAddAnnotation({ type: 'comment', annotation: {attributes: {id: annotationId}} });
+    crayon.windowManager.showTextEditor({ type: 'comment', id: annotationId });
   };
 
   Dispatcher.prototype.newReply = function ( commentId ) {

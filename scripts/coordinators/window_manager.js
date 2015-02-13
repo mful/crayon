@@ -8,37 +8,29 @@ crayon.coordinators.WindowManager = ( function () {
   };
 
   // TODO: Update spec
-  WindowManager.prototype.handleAddAnnotation = function ( data ) {
-    var views;
+  WindowManager.prototype.handleAddNewAnnotation = function ( annotation ) {
+    var errors, views;
 
-    if ( this.windows.createWidget ) this.windows.createWidget.hide();
-
-    if ( !data.annotation.isValid() ) {
-      errors = data.annotation.errors.join("\n- ");
+    if ( !annotation.isValid() ) {
+      errors = annotation.errors.join("\n- ");
       alert( ":( We can't annotate the highlighted text.\n\n- " + errors );
       return;
     }
 
-    switch ( data.type ) {
-      case 'comment':
-        this.showTextEditor({type: 'comment', id: data.annotation.attributes.id});
-        break;
-      case 'annotation':
-        views = crayon.annotatedTextManager.injectAnnotation( data.annotation );
-        this.showTextEditor(
-          {
-            type: 'annotation',
-            id: null,
-            urlParams: {
-              text: data.annotation.attributes.text,
-              url: data.annotation.attributes.url
-            }
-          }
-        ,
-          {annotatedTextView: views[0]}
-        );
-        break;
-    }
+
+    views = crayon.annotatedTextManager.injectAnnotation( annotation );
+    this.showTextEditor(
+      {
+        type: 'annotation',
+        id: null,
+        urlParams: {
+          text: annotation.attributes.text,
+          url: annotation.attributes.url
+        }
+      }
+    ,
+      {annotatedTextView: views[0]}
+    );
 
     crayon.annotatedTextManager.activateAnnotation( data.annotation );
   };
