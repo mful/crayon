@@ -98,6 +98,22 @@ crayon.coordinators.WindowManager = ( function () {
     }
   };
 
+  WindowManager.prototype.rearrangeWindows = function ( target ) {
+    switch ( target ) {
+      case 'paper':
+        this.setActive( this.windows.textEditorView );
+        break;
+      case 'bubble':
+        this.setActive( this.windows.annotationBubble );
+        break;
+      case 'retort':
+        this.setActive( this.windows.sidebar );
+        break;
+    }
+
+    return target;
+  };
+
   WindowManager.prototype.removeWindow = function ( view ) {
     if ( !view ) return;
 

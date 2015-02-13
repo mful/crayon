@@ -3,7 +3,7 @@ crayon.views || ( crayon.views = {} )
 crayon.views.AddAnnotationView = ( function () {
 
   AddAnnotationView.prototype.id = 'crayon-add-annotation';
-  AddAnnotationView.prototype.className = 'crayon-widget crayon-add-annotation-view hidden';
+  AddAnnotationView.prototype.className = 'crayon-widget crayon-window crayon-add-annotation-view hidden';
 
   function AddAnnotationView () {
     this.render = this.render.bind( this );

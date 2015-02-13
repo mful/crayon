@@ -14,7 +14,7 @@ crayon.observers.MouseupObserver = ( function () {
   MouseupObserver.prototype.notifyMouseup = function ( e ) {
     return crayon.dispatcher.dispatch({
       message: crayon.constants.UserActionConstants.MOUSEUP,
-      data: e
+      data: {event: e}
     });
   };
 

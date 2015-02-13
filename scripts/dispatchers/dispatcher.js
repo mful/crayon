@@ -37,6 +37,9 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.CourierConstants.POST_CREATE_COMMENT:
         _this.notifyCreateComment( payload.data );
         break;
+      case crayon.constants.CourierConstants.POST_MOUSEUP:
+        _this.rearrangeWindows( payload.data );
+        break;
       case crayon.constants.SessionConstants.AUTH_NEEDED:
         _this.promptAuth( payload.data );
         break;
@@ -81,8 +84,8 @@ crayon.dispatchers.Dispatcher = ( function () {
     return crayon.windowManager.handleCreateAnnotation( model );
   };
 
-  Dispatcher.prototype.manageWindows = function ( event ) {
-    return crayon.windowManager.handleMouseup( event );
+  Dispatcher.prototype.manageWindows = function ( data ) {
+    return crayon.windowManager.handleMouseup( data.event );
   };
 
   Dispatcher.prototype.maybeClearHighlight = function () {
@@ -118,6 +121,10 @@ crayon.dispatchers.Dispatcher = ( function () {
 
   Dispatcher.prototype.promptAuth = function ( data ) {
     crayon.windowManager.showAuth( data.referringAction );
+  };
+
+  Dispatcher.prototype.rearrangeWindows = function ( data ) {
+    crayon.windowManager.rearrangeWindows( data.event.target );
   };
 
   Dispatcher.prototype.removeWindow = function ( view ) {
