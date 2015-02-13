@@ -8,11 +8,10 @@
     "page" : "html/background.html"
   },
 
-  // TODO: use logo
   "icons": {
-    "16": "images/pen16.png",
-    "48": "images/pen48.png",
-    "128": "images/pen128.png"
+    "16": "images/s16.png",
+    "48": "images/s48.png",
+    "128": "images/s128.png"
   },
 
   "content_scripts": [
