@@ -4,9 +4,6 @@
   "name": "Scribble",
   "description": "Annotate the internet.",
   "version": "1.0",
-  "background": {
-    "page" : "html/background.html"
-  },
 
   "icons": {
     "16": "images/s16.png",
@@ -30,10 +27,6 @@
       "https://scribble.ly/*"
     ]
   },
-
-  "permissions" : [
-    "background"
-  ],
 
   "web_accessible_resources": [
     "fonts/*.woff2",
