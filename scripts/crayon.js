@@ -19,7 +19,6 @@ crayon.init = function () {
   crayon.dispatcher = new crayon.dispatchers.Dispatcher();
   crayon.courier = new crayon.mediators.Courier();
   new crayon.observers.HighlightObserver();
-  new crayon.observers.MouseupObserver();
 
   crayon.dispatcher.dispatch({
     message: crayon.constants.AppConstants.READY,

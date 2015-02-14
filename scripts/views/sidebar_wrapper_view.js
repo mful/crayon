@@ -5,29 +5,23 @@ crayon.views.SidebarWrapperView = ( function () {
   SidebarWrapperView.prototype.id = 'crayon-sidebar-wrapper';
   SidebarWrapperView.prototype.className = 'crayon-sidebar-wrapper-view crayon-window';
 
-  function SidebarWrapperView ( params ) {
-    this.commentId = params.commentId;
+  function SidebarWrapperView () {
     this.element = assembleTemplate();
     this.iframe = this.element.querySelector( 'iframe' );
-
-    this.iframe.src = crayon.helpers.routes.replies_url( this.commentId );
+    this.rendered = false;
   };
 
-  SidebarWrapperView.prototype.render = function () {
-    document.body.appendChild( this.element );
+  SidebarWrapperView.prototype.render = function ( url ) {
+    if ( !this.rendered ) document.body.appendChild( this.element );
+    this.iframe.src = url;
+    this.rendered = true;
+
     return this;
   };
 
   SidebarWrapperView.prototype.remove = function () {
     document.body.removeChild( this.element );
     return this;
-  };
-
-  SidebarWrapperView.prototype.notifyRemove = function () {
-    crayon.dispatcher.dispatch({
-      message: crayon.constants.CommentConstants.REMOVE_WINDOW,
-      data: {view: this}
-    });
   };
 
   var assembleTemplate = function () {

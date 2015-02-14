@@ -1,11 +1,13 @@
 .crayon-sidebar-wrapper-view {
-  background: $paper;
-  border-left: solid $paper_dark 1px;
+  background: $white;
   bottom: 0;
+  box-shadow: 0 0 5px $grey;
+  max-width: 450px;
+  min-width: 320px;
   position: fixed;
   right: 0;
   top: 0;
-  width: 300px;
+  width: 33%;
 
   iframe {
     border: none;
