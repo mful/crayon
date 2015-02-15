@@ -9,10 +9,16 @@ crayon.views.SidebarWrapperView = ( function () {
     this.element = assembleTemplate();
     this.iframe = this.element.querySelector( 'iframe' );
     this.rendered = false;
+
+    this.notifyRemove = this.notifyRemove.bind( this );
   };
 
   SidebarWrapperView.prototype.render = function ( url ) {
-    if ( !this.rendered ) document.body.appendChild( this.element );
+    if ( !this.rendered ) {
+      document.body.appendChild( this.element );
+      this.delegateEvents();
+    }
+
     this.iframe.src = url;
     this.rendered = true;
 
@@ -24,6 +30,20 @@ crayon.views.SidebarWrapperView = ( function () {
     return this;
   };
 
+  SidebarWrapperView.prototype.notifyRemove = function () {
+    crayon.dispatcher.dispatch({
+      message: crayon.constants.WindowConstants.REMOVE_WINDOW,
+      data: {view: this}
+    });
+  };
+
+  SidebarWrapperView.prototype.delegateEvents = function () {
+    ev( this.element.querySelector('.crayon-close-sidebar') ).
+      on( 'click', this.notifyRemove );
+
+    return this;
+  };
+
   var assembleTemplate = function () {
     var wrapper, innerHTML;
 
@@ -31,7 +51,7 @@ crayon.views.SidebarWrapperView = ( function () {
     wrapper.id = SidebarWrapperView.prototype.id;
     wrapper.className = SidebarWrapperView.prototype.className;
 
-    innerHTML = "<iframe></iframe>";
+    innerHTML = "<iframe></iframe><div class=\"crayon-close-sidebar\"><i class=\"ion-android-close\"></i></div>";
 
     wrapper.innerHTML = innerHTML;
 
