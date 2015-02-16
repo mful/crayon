@@ -99,6 +99,7 @@ crayon.dispatchers.Dispatcher = ( function () {
 
   Dispatcher.prototype.showComments = function ( data ) {
     return crayon.windowManager.showSidebar(
+      data.annotation,
       crayon.helpers.routes.annotation_url( data.annotation.attributes.id )
     );
   };

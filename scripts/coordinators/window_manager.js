@@ -106,11 +106,12 @@ crayon.coordinators.WindowManager = ( function () {
     return this.windows.createWidget.render( annotation );
   };
 
-  WindowManager.prototype.showSidebar = function ( url ) {
+  WindowManager.prototype.showSidebar = function ( annotation, url ) {
     if ( !this.windows.sidebar )
       this.windows.sidebar = new crayon.views.SidebarWrapperView();
 
     this.windows.sidebar.render( url );
+    crayon.annotatedTextManager.activateAnnotation( annotation );
   };
 
   WindowManager.prototype.setActive = function ( view ) {
