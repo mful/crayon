@@ -8,7 +8,7 @@ crayon.coordinators.WindowManager = ( function () {
   };
 
   WindowManager.prototype.handleAddNewAnnotation = function ( annotation ) {
-    var errors, views;
+    var errors, url;
 
     if ( !annotation.isValid() ) {
       errors = annotation.errors.join("\n- ");
@@ -16,16 +16,13 @@ crayon.coordinators.WindowManager = ( function () {
       return;
     }
 
+    url = crayon.helpers.routes.new_annotation_url({
+      text: annotation.attributes.text,
+      url: annotation.attributes.url
+    })
 
     views = crayon.annotatedTextManager.injectAnnotation( annotation );
-    this.showSidebar({
-      type: 'annotation',
-      id: null,
-      urlParams: {
-        text: annotation.attributes.text,
-        url: annotation.attributes.url
-      }
-    });
+    this.showSidebar( annotation, url );
 
     crayon.annotatedTextManager.activateAnnotation( annotation );
   };

@@ -27,6 +27,11 @@ crayon.views.SidebarWrapperView = ( function () {
 
   SidebarWrapperView.prototype.remove = function () {
     document.body.removeChild( this.element );
+    crayon.dispatcher.dispatch({
+      message: crayon.constants.AnnotationConstants.CANCEL_ANNOTATION,
+      data: {}
+    });
+
     return this;
   };
 

@@ -7,6 +7,9 @@ crayon.dispatchers.Dispatcher = ( function () {
     var _this = this;
 
     switch ( payload.message ) {
+      case crayon.constants.AnnotationConstants.CANCEL_ANNOTATION:
+        _this.cancelAnnotation();
+        break;
       case crayon.constants.AppConstants.READY:
         _this.fetchPageAnnotations();
         break;
@@ -51,6 +54,10 @@ crayon.dispatchers.Dispatcher = ( function () {
     } else {
       crayon.windowManager.handleAddNewAnnotation( annotation );
     }
+  };
+
+  Dispatcher.prototype.cancelAnnotation = function () {
+    crayon.annotatedTextManager.removeUnpersistedAnnotations();
   };
 
   Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {

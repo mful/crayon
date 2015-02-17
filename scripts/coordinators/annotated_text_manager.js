@@ -52,6 +52,15 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
     }
   };
 
+  AnnotatedTextManager.prototype.removeUnpersistedAnnotations = function () {
+    for ( var i = 0; i < this.views.length; i++ ) {
+      if ( !this.views[i].model.attributes.id ) {
+        this.views[i].remove();
+        this.views.slice( i, i + 1 );
+      }
+    }
+  };
+
   return AnnotatedTextManager;
 
 })();
