@@ -97,10 +97,14 @@ crayon.coordinators.WindowManager = ( function () {
   };
 
   WindowManager.prototype.showCreateWidget = function ( annotation ) {
+    var pad;
+
     if ( !this.windows.createWidget )
       this.windows.createWidget = new crayon.views.AddAnnotationView();
 
-    return this.windows.createWidget.render( annotation );
+    pad = this.windows.sidebar ? this.windows.sidebar.element.clientWidth : 0;
+
+    return this.windows.createWidget.render( annotation, pad );
   };
 
   WindowManager.prototype.showSidebar = function ( annotation, url ) {
