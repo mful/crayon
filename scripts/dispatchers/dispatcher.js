@@ -57,7 +57,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.cancelAnnotation = function () {
-    crayon.annotatedTextManager.removeUnpersistedAnnotations();
+    crayon.annotatedTextManager.removeActiveIfUnpersisted();
   };
 
   Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {

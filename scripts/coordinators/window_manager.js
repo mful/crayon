@@ -21,10 +21,8 @@ crayon.coordinators.WindowManager = ( function () {
       url: annotation.attributes.url
     })
 
-    views = crayon.annotatedTextManager.injectAnnotation( annotation );
+    crayon.annotatedTextManager.injectAnnotation( annotation );
     this.showSidebar( annotation, url );
-
-    crayon.annotatedTextManager.activateAnnotation( annotation );
   };
 
   // TODO: add spec
@@ -42,7 +40,7 @@ crayon.coordinators.WindowManager = ( function () {
 
   // TODO: add spec
   WindowManager.prototype.handleCreateAnnotation = function ( annotation ) {
-    // stub
+    crayon.annotatedTextManager.persistActiveAnnotation( annotation );
   };
 
   WindowManager.prototype.maybeHideWidget = function () {
@@ -111,6 +109,7 @@ crayon.coordinators.WindowManager = ( function () {
     if ( !this.windows.sidebar )
       this.windows.sidebar = new crayon.views.SidebarWrapperView();
 
+    this.setActive( this.windows.sidebar );
     this.windows.sidebar.render( url );
     crayon.annotatedTextManager.activateAnnotation( annotation );
   };

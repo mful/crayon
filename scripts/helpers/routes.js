@@ -28,6 +28,8 @@ crayon.helpers.routes = {};
 
   // TODO: Add spec
   namespace.new_annotation_url = function ( params ) {
+    params || ( params = {} );
+
     return urlRoot() + '/annotations/new?' +
       crayon.helpers.url.toQueryStr( params );
   };

@@ -63,6 +63,8 @@ crayon.views.AnnotatedTextView = ( function () {
       func( this.elements[i], 'crayon-active' )
     }
 
+    this.active = active;
+
     return this;
   };
 
