@@ -1,11 +1,27 @@
 .crayon-sidebar-wrapper-view {
-  background: $paper;
-  border-left: solid $paper_dark 1px;
+  background: $white;
   bottom: 0;
+  box-shadow: 0 0 5px $grey;
+  max-width: 450px;
+  min-width: 320px;
   position: fixed;
   right: 0;
   top: 0;
-  width: 300px;
+  width: 33%;
+
+  .crayon-close-sidebar {
+    color: $light_grey;
+    cursor: pointer;
+    font-size: 1.778rem;
+    position: fixed;
+    right: 5px;
+    top: 0;
+    transition: color 300ms ease-out;
+
+    &:hover {
+      color: $grey_med;
+    }
+  }
 
   iframe {
     border: none;

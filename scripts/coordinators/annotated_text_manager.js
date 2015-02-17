@@ -35,9 +35,12 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
   AnnotatedTextManager.prototype.activateAnnotation = function ( annotation ) {
     var i, activeView;
 
+    this.removeActiveIfUnpersisted();
+
     for ( i = 0; i < this.views.length; i++ ) {
       if ( this.views[i].model === annotation ) {
         activeView = this.views[i].setActive( true );
+        this.activeView = activeView;
       } else {
         this.views[i].setActive( false );
       }
@@ -49,6 +52,21 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
   AnnotatedTextManager.prototype.deactivateAnnotations = function () {
     for ( var i = 0; i < this.views.length; i++ ) {
       this.views[i].setActive( false );
+    }
+  };
+
+  AnnotatedTextManager.prototype.persistActiveAnnotation = function ( annotation ) {
+    if ( this.activeView && !this.activeView.model.attributes.id )
+      this.activeView.model = annotation;
+  };
+
+  AnnotatedTextManager.prototype.removeActiveIfUnpersisted = function () {
+    var viewIndex;
+
+    if ( this.activeView && !this.activeView.model.attributes.id ) {
+      viewIndex = this.views.indexOf( this.activeView );
+      this.activeView.remove();
+      this.views.slice( viewIndex, viewIndex + 1 );
     }
   };
 

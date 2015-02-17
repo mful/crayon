@@ -18,6 +18,13 @@ module.exports = function(grunt){
         expand: true
       },
 
+      prod_scripts: {
+        cwd: 'production/scripts',
+        src: [ 'prod_init.js' ],
+        dest: 'build/scripts',
+        expand: true
+      },
+
       scripts: {
         cwd: 'scripts',
         src: ['**/*.js'],
@@ -89,7 +96,7 @@ module.exports = function(grunt){
     uglify: {
       build: {
         files: {
-          'build/scripts/scribble.js': [ 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/background/**/*.js' ],
+          'build/scripts/scribble.js': [ 'build/scripts/prod_init.js', 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/background/**/*.js' ],
           'build/scripts/background.js': [ 'build/scripts/background/**/*.js' ]
         }
       }
@@ -117,7 +124,7 @@ module.exports = function(grunt){
   grunt.registerTask(
     'scripts',
     'Compiles the JavaScript files.',
-    ['copy:vendorScripts', 'copy:scripts', 'uglify', 'clean:scripts']
+    ['copy:vendorScripts', 'copy:prod_scripts', 'copy:scripts', 'uglify', 'clean:scripts']
   );
 
   grunt.registerTask(
@@ -141,7 +148,7 @@ module.exports = function(grunt){
   grunt.registerTask(
     'spec',
     'Run Jasmine tests.',
-    ['scripts', 'jasmine']
+    ['clean:build', 'devScripts', 'jasmine']
   );
 
   grunt.registerTask('default', []);

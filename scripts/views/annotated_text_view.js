@@ -63,6 +63,8 @@ crayon.views.AnnotatedTextView = ( function () {
       func( this.elements[i], 'crayon-active' )
     }
 
+    this.active = active;
+
     return this;
   };
 
@@ -77,11 +79,7 @@ crayon.views.AnnotatedTextView = ( function () {
     // needs to consider scroll position (display upper of lower?)
     return crayon.dispatcher.dispatch({
       message: crayon.constants.CommentConstants.SHOW_COMMENTS,
-      data: {
-        element: this.elements[0],
-        view: this,
-        annotation: this.model
-      }
+      data: {annotation: this.model}
     });
   };
 

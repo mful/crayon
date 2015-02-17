@@ -5,29 +5,48 @@ crayon.views.SidebarWrapperView = ( function () {
   SidebarWrapperView.prototype.id = 'crayon-sidebar-wrapper';
   SidebarWrapperView.prototype.className = 'crayon-sidebar-wrapper-view crayon-window';
 
-  function SidebarWrapperView ( params ) {
-    this.commentId = params.commentId;
+  function SidebarWrapperView () {
     this.element = assembleTemplate();
     this.iframe = this.element.querySelector( 'iframe' );
+    this.rendered = false;
 
-    this.iframe.src = crayon.helpers.routes.replies_url( this.commentId );
+    this.notifyRemove = this.notifyRemove.bind( this );
   };
 
-  SidebarWrapperView.prototype.render = function () {
-    document.body.appendChild( this.element );
+  SidebarWrapperView.prototype.render = function ( url ) {
+    if ( !this.rendered ) {
+      document.body.appendChild( this.element );
+      this.delegateEvents();
+    }
+
+    this.iframe.src = url;
+    this.rendered = true;
+
     return this;
   };
 
   SidebarWrapperView.prototype.remove = function () {
     document.body.removeChild( this.element );
+    crayon.dispatcher.dispatch({
+      message: crayon.constants.AnnotationConstants.CANCEL_ANNOTATION,
+      data: {}
+    });
+
     return this;
   };
 
   SidebarWrapperView.prototype.notifyRemove = function () {
     crayon.dispatcher.dispatch({
-      message: crayon.constants.CommentConstants.REMOVE_WINDOW,
+      message: crayon.constants.WindowConstants.REMOVE_WINDOW,
       data: {view: this}
     });
+  };
+
+  SidebarWrapperView.prototype.delegateEvents = function () {
+    ev( this.element.querySelector('.crayon-close-sidebar') ).
+      on( 'click', this.notifyRemove );
+
+    return this;
   };
 
   var assembleTemplate = function () {
@@ -37,7 +56,7 @@ crayon.views.SidebarWrapperView = ( function () {
     wrapper.id = SidebarWrapperView.prototype.id;
     wrapper.className = SidebarWrapperView.prototype.className;
 
-    innerHTML = "<iframe></iframe>";
+    innerHTML = "<iframe></iframe><div class=\"crayon-close-sidebar\"><i class=\"ion-android-close\"></i></div>";
 
     wrapper.innerHTML = innerHTML;
 

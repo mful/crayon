@@ -28,6 +28,8 @@ crayon.helpers.routes = {};
 
   // TODO: Add spec
   namespace.new_annotation_url = function ( params ) {
+    params || ( params = {} );
+
     return urlRoot() + '/annotations/new?' +
       crayon.helpers.url.toQueryStr( params );
   };
@@ -47,11 +49,10 @@ crayon.helpers.routes = {};
     return urlRoot() + '/signup?' + crayon.helpers.url.toQueryStr( params );
   };
 
-  // TODO: update to use heroku HTTPS
   var urlRoot = function () {
     if ( _urlRoot == null ) {
       if ( crayon.env === 'production' ) {
-        _urlRoot = 'http://scribble.ly';
+        _urlRoot = 'https://scribblely.herokuapp.com';
       } else if ( crayon.env === 'development' ) {
         _urlRoot = 'http://scribble.dev:3000';
       } else {

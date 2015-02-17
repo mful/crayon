@@ -1,6 +1,7 @@
 crayon.views || ( crayon.views = {} )
 
 crayon.views.AddAnnotationView = ( function () {
+  BREATHING_ROOM = 12;
 
   AddAnnotationView.prototype.id = 'crayon-add-annotation';
   AddAnnotationView.prototype.className = 'crayon-widget crayon-window crayon-add-annotation-view hidden';
@@ -17,11 +18,14 @@ crayon.views.AddAnnotationView = ( function () {
     return this;
   };
 
-  AddAnnotationView.prototype.render = function ( model ) {
+  AddAnnotationView.prototype.render = function ( model, sidebarPadding ) {
     this.model = model;
+    sidebarPadding || ( sidebarPadding = 0 );
 
     if ( !document.getElementById( this.id ) )
       document.body.appendChild( this.element );
+
+    this.element.style.right = sidebarPadding + BREATHING_ROOM + 'px';
     this.show();
 
     return this;

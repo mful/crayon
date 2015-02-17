@@ -9,95 +9,44 @@ describe( 'crayon.coordinators.WindowManager', function () {
     delete this.coordinator;
   });
 
-  describe( '#handleAddAnnotation', function () {
+  describe( '#handleAddNewAnnotation', function () {
 
     beforeEach( function () {
-      spyOn( this.coordinator, 'showTextEditor' )
+      this.annotation = {attributes: {id: 1}, isValid: function () {}};
+
+      spyOn( crayon.annotatedTextManager, 'injectAnnotation' ).and.returnValue( [] );
     });
 
-    describe( 'when there is an active annotation bubble', function () {
+    describe( 'when the annotation is valid', function () {
 
       beforeEach( function () {
-        var activeWindow = {},
-            annotation = {attributes: {id: 1}, isValid: function () {return true}};
-        this.coordinator.activeWindow = activeWindow;
-        this.coordinator.windows.annotationBubble = activeWindow;
+        spyOn( this.annotation, 'isValid' ).and.returnValue( true );
 
-        this.coordinator.handleAddAnnotation({ annotation: annotation, type: 'comment' })
+        this.coordinator.handleAddNewAnnotation( this.annotation );
       });
 
-      it( 'should open the text editor', function () {
-        expect( this.coordinator.showTextEditor ).toHaveBeenCalled();
+      it( 'should inject the annotation', function () {
+        expect( crayon.annotatedTextManager.injectAnnotation ).toHaveBeenCalled();
       });
     });
 
-    describe( 'when needing to create a new annotation', function () {
-      // stub
-    });
-  });
-
-  describe( '#handleMouseup', function () {
-    describe( 'when there is an active annotation bubble', function () {
+    describe( 'when the annotation is NOT valid', function () {
 
       beforeEach( function () {
-        var view = {};
+        this.annotation.errors = [];
 
-        this.view = new crayon.views.AnnotationBubbleWrapperView({
-          element: document.createElement( 'div' ),
-          annotation: new crayon.models.Annotation({ id: 1 }),
-          view: view
-        });
+        spyOn( this.annotation, 'isValid' ).and.returnValue( false );
+        spyOn( window, 'alert' );
 
-        this.coordinator.windows.annotationBubble = this.view;
-
-        spyOn( this.view, 'remove' );
+        this.coordinator.handleAddNewAnnotation( this.annotation );
       });
 
-      afterEach( function () {
-        delete this.view;
+      it( 'should alert the user', function () {
+        expect( window.alert ).toHaveBeenCalled();
       });
 
-      describe( 'when the mouseup occurs outside of a crayon view', function () {
-
-        beforeEach( function () {
-          this.coordinator.handleMouseup({ target: document.createElement('div') });
-        });
-
-        it( 'should close the bubble, and null out the reference', function () {
-          expect( this.view.remove ).toHaveBeenCalled();
-        });
-
-        it( 'should null out the reference', function () {
-          expect( this.coordinator.windows.annotationBubble === null ).toEqual( true );
-        });
-      });
-
-      describe( 'when the mouseup occurs on a crayon view element', function () {
-
-        beforeEach( function () {
-          this.coordinator.handleMouseup({target: this.coordinator.windows.annotationBubble.element})
-        });
-
-        it( 'should do nothing', function () {
-          expect( this.view.remove ).not.toHaveBeenCalled();
-        });
-      });
-
-      describe( 'when the mouseup occurs on a child element of a crayon view element', function () {
-
-        beforeEach( function () {
-          var el = document.createElement( 'div' ),
-              child = document.createElement( 'span' );
-
-          el.appendChild( child );
-          this.coordinator.windows.annotationBubble.element.appendChild( el );
-
-          this.coordinator.handleMouseup({target: child})
-        });
-
-        it( 'should do nothing', function () {
-          expect( this.view.remove ).not.toHaveBeenCalled();
-        });
+      it( 'should not inject the annotation', function () {
+        expect( crayon.annotatedTextManager.injectAnnotation ).not.toHaveBeenCalled();
       });
     });
   });
@@ -238,49 +187,6 @@ describe( 'crayon.coordinators.WindowManager', function () {
     });
   });
 
-  describe( '#showCommentsBubble', function () {
-    describe( 'when there already is an active bubble', function () {
-      beforeEach( function () {
-        this.childView = {render: function () {return this;}, element: document.createElement( 'div' )};
-        var data = {
-          element: document.createElement( 'div' ),
-          annotation: new crayon.models.Annotation({ id: 1 }),
-          view: this.childView
-        };
-        this.view = {remove: function () {}};
-        this.coordinator.windows.annotationBubble = this.view;
-
-        spyOn( crayon.views, 'AnnotationBubbleWrapperView' ).and.returnValue( this.childView );
-        spyOn( this.view, 'remove' );
-        spyOn( this.childView, 'render' ).and.returnValue( this.childView );
-        spyOn( crayon.annotatedTextManager, 'activateAnnotation' );
-
-        this.coordinator.showCommentsBubble( data );
-      });
-
-      afterEach( function () {
-        delete this.view;
-        delete this.childView;
-      });
-
-      it( 'should remove the old view', function () {
-        expect( this.view.remove ).toHaveBeenCalled();
-      });
-
-      it( 'should render a new view', function () {
-        expect( this.childView.render ).toHaveBeenCalled();
-      });
-
-      it( 'should set the new view as the active window', function () {
-        expect( this.childView ).toEqual( this.coordinator.activeWindow );
-      });
-
-      it( 'should activate the annotation', function () {
-        expect( crayon.annotatedTextManager.activateAnnotation ).toHaveBeenCalled();
-      });
-    });
-  });
-
   describe( '#showCreateWidget', function () {
     beforeEach( function () {
       this.annotation = crayon.models.Annotation.createFromSelection({
@@ -322,98 +228,6 @@ describe( 'crayon.coordinators.WindowManager', function () {
 
       it( 'should render the view', function () {
         expect( this.view.render ).toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe( '#showTextEditor', function () {
-
-    beforeEach( function () {
-      spyOn( crayon.views, 'TextEditorWrapperView' ).and.returnValue({ render: function () {} });
-      spyOn( this.coordinator, 'setActive' );
-    });
-
-    describe( 'when there is not a textEditorView', function () {
-
-      beforeEach( function () {
-        var data = {type: 'comment', id: 1};
-        this.coordinator.showTextEditor( data );
-      });
-
-      it( 'should instantiate a new view', function () {
-        expect( crayon.views.TextEditorWrapperView ).toHaveBeenCalled();
-      });
-
-      it( 'should activate that view', function () {
-        expect( this.coordinator.setActive ).toHaveBeenCalled();
-      });
-    });
-
-    describe( 'when there is a textEditor view already', function () {
-
-      beforeEach( function () {
-        this.view = {
-          remove: function () {},
-          commentableType: 'comment',
-          commentableId: 1
-        };
-
-        this.coordinator.windows.textEditorView = this.view;
-
-        spyOn( this.view, 'remove' );
-      });
-
-      describe( 'and that view is for the same object', function () {
-        beforeEach( function () {
-          var data = {type: 'comment', id: 1};
-          this.coordinator.showTextEditor( data );
-        });
-
-        it( 'should not remove the view', function () {
-          expect( this.view.remove ).not.toHaveBeenCalled();
-        });
-
-        it( 'should not instantiate a new view', function () {
-          expect( crayon.views.TextEditorWrapperView ).not.toHaveBeenCalled();
-        });
-      });
-
-      describe( 'and that view is for a different type of object', function () {
-        beforeEach( function () {
-          var data = {type: 'reply', id: 1};
-          this.coordinator.showTextEditor( data );
-        });
-
-        it( 'should remove the current view', function () {
-          expect( this.view.remove ).toHaveBeenCalled();
-        });
-
-        it( 'should instantiate a new view', function () {
-          expect( crayon.views.TextEditorWrapperView ).toHaveBeenCalled();
-        });
-
-        it( 'should activate that view', function () {
-          expect( this.coordinator.setActive ).toHaveBeenCalled();
-        });
-      });
-
-      describe( 'and that view is for a different object of the same type', function () {
-        beforeEach( function () {
-          var data = {type: 'comment', id: 2};
-          this.coordinator.showTextEditor( data );
-        });
-
-        it( 'should remove the current view', function () {
-          expect( this.view.remove ).toHaveBeenCalled();
-        });
-
-        it( 'should instantiate a new view', function () {
-          expect( crayon.views.TextEditorWrapperView ).toHaveBeenCalled();
-        });
-
-        it( 'should activate that view', function () {
-          expect( this.coordinator.setActive ).toHaveBeenCalled();
-        });
       });
     });
   });

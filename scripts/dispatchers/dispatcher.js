@@ -7,26 +7,20 @@ crayon.dispatchers.Dispatcher = ( function () {
     var _this = this;
 
     switch ( payload.message ) {
+      case crayon.constants.AnnotationConstants.CANCEL_ANNOTATION:
+        _this.cancelAnnotation();
+        break;
       case crayon.constants.AppConstants.READY:
         _this.fetchPageAnnotations();
         break;
       case crayon.constants.AnnotationConstants.NEW_ANNOTATION:
         _this.newAnnotation( payload.data );
         break;
-      case crayon.constants.CommentConstants.CANCEL_COMMENT:
-        _this.handleCancelComment( payload.data.view );
-        break;
-      case crayon.constants.CommentConstants.NEW_REPLY:
-        _this.newReply( payload.data.comment_id );
-        break;
       case crayon.constants.CommentConstants.NEW_COMMENT:
         _this.newComment( payload.data.annotation_id );
         break;
       case crayon.constants.CommentConstants.SHOW_COMMENTS:
         _this.showComments( payload.data );
-        break;
-      case crayon.constants.CommentConstants.SHOW_REPLIES:
-        _this.showReplies( payload.data.comment_id );
         break;
       case crayon.constants.CourierConstants.POST_LOGIN:
         _this.notifyLogin( payload.data );
@@ -37,17 +31,11 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.CourierConstants.POST_CREATE_COMMENT:
         _this.notifyCreateComment( payload.data );
         break;
-      case crayon.constants.CourierConstants.POST_MOUSEUP:
-        _this.rearrangeWindows( payload.data );
-        break;
       case crayon.constants.SessionConstants.AUTH_NEEDED:
         _this.promptAuth( payload.data );
         break;
       case crayon.constants.UserActionConstants.CLEAR_HIGHLIGHT:
         _this.maybeClearHighlight();
-        break;
-      case crayon.constants.UserActionConstants.MOUSEUP:
-        _this.manageWindows( payload.data );
         break;
       case crayon.constants.AnnotationConstants.ADD_ANNOTATION:
         _this.addNewAnnotation( payload.data );
@@ -68,24 +56,17 @@ crayon.dispatchers.Dispatcher = ( function () {
     }
   };
 
-  Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
-    return crayon.annotatedTextManager.showAllOnPage( crayon.helpers.url.currentHref() );
+  Dispatcher.prototype.cancelAnnotation = function () {
+    crayon.annotatedTextManager.removeActiveIfUnpersisted();
   };
 
-  // TODO: add spec or move to windowManager and add spec thereg
-  Dispatcher.prototype.handleCancelComment = function ( view ) {
-    if ( view.annotatedTextView && !view.annotatedTextView.model.attributes.id )
-        view.annotatedTextView.remove();
-    return this.removeWindow( view );
+  Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
+    return crayon.annotatedTextManager.showAllOnPage( crayon.helpers.url.currentHref() );
   };
 
   Dispatcher.prototype.handleCreateAnnotation = function ( annotation ) {
     var model = new crayon.models.Annotation( annotation );
     return crayon.windowManager.handleCreateAnnotation( model );
-  };
-
-  Dispatcher.prototype.manageWindows = function ( data ) {
-    return crayon.windowManager.handleMouseup( data.event );
   };
 
   Dispatcher.prototype.maybeClearHighlight = function () {
@@ -100,10 +81,6 @@ crayon.dispatchers.Dispatcher = ( function () {
 
   Dispatcher.prototype.newComment = function ( annotationId ) {
     crayon.windowManager.showTextEditor({ type: 'comment', id: annotationId });
-  };
-
-  Dispatcher.prototype.newReply = function ( commentId ) {
-    crayon.windowManager.showTextEditor({ type: 'reply', id: commentId });
   };
 
   Dispatcher.prototype.notifyLogin = function ( data ) {
@@ -123,21 +100,15 @@ crayon.dispatchers.Dispatcher = ( function () {
     crayon.windowManager.showAuth( data.referringAction );
   };
 
-  Dispatcher.prototype.rearrangeWindows = function ( data ) {
-    crayon.windowManager.rearrangeWindows( data.event.target );
-  };
-
   Dispatcher.prototype.removeWindow = function ( view ) {
     crayon.windowManager.removeWindow( view );
   };
 
   Dispatcher.prototype.showComments = function ( data ) {
-    crayon.windowManager.showCreateWidget( data.annotation );
-    return crayon.windowManager.showCommentsBubble( data );
-  };
-
-  Dispatcher.prototype.showReplies = function ( commentId ) {
-    return crayon.windowManager.showRepliesSidebar( commentId );
+    return crayon.windowManager.showSidebar(
+      data.annotation,
+      crayon.helpers.routes.annotation_url( data.annotation.attributes.id )
+    );
   };
 
   return Dispatcher;
