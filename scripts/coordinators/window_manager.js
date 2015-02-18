@@ -76,8 +76,11 @@ crayon.coordinators.WindowManager = ( function () {
       }
     }
 
-    if ( !this.windows.sidebar )
-        crayon.annotatedTextManager.deactivateAnnotations();
+    if ( !this.windows.sidebar ) {
+      crayon.annotatedTextManager.deactivateAnnotations();
+    } else if ( !this.activeWindow ) {
+      this.setActive( this.windows.sidebar );
+    }
   };
 
   WindowManager.prototype.showAuth = function ( referringAction ) {
