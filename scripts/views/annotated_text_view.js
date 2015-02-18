@@ -125,12 +125,12 @@ crayon.views.AnnotatedTextView = ( function () {
       );
     } else if ( first ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + '.*$' ),
+        new RegExp( crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + '.*' ),
         openTag + '$&</span>'
       );
     } else if ( last ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( '^.*' + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) ),
+        new RegExp( '.*' + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) ),
         openTag + '$&</span>'
       );
     } else {

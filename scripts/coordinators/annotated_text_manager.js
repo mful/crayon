@@ -24,6 +24,7 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
 
   AnnotatedTextManager.prototype.injectAnnotation = function ( annotation ) {
     var newViews;
+    this.removeActiveIfUnpersisted();
 
     injector = new crayon.services.AnnotationInjector( annotation, crayon.views.AnnotatedTextView );
     newViews = injector.inject();
