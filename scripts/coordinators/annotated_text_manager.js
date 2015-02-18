@@ -33,6 +33,24 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
     return newViews;
   };
 
+  AnnotatedTextManager.prototype.isAnnotationUnique = function ( annotation ) {
+    var currentAnnotations = this.views.map( function ( view ) {
+        return view.model;
+      }),
+      i, isContained;
+
+    for ( var i = 0; i < currentAnnotations.length; i++ ) {
+      isContained = crayon.helpers.utility.isContained(
+        annotation.attributes.text,
+        currentAnnotations[i].attributes.text
+      );
+
+      if ( isContained ) return false;
+    }
+
+    return true;
+  };
+
   AnnotatedTextManager.prototype.activateAnnotation = function ( annotation ) {
     var i, activeView;
 
@@ -68,7 +86,7 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
       viewIndex = this.views.indexOf( this.activeView );
       this.activeView.remove();
       this.activeView = null;
-      this.views.slice( viewIndex, viewIndex + 1 );
+      this.views.splice( viewIndex, 1 );
     }
   };
 

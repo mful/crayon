@@ -93,6 +93,14 @@ crayon.models.Annotation = ( function () {
         "Please select at least " + MIN_TEXT_LENGTH + "characters to annotate."
       );
     }
+
+    if ( !crayon.annotatedTextManager.isAnnotationUnique(this) ) {
+      this.errors.push(
+        "The chosen text contains another annotation in its entirety. Please " +
+        "either add a note to the already existing annotation, or select " +
+        "text that does not contain another annotation."
+      );
+    }
   };
 
   // private helpers
