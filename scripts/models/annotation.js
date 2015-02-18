@@ -1,5 +1,6 @@
 crayon.models || ( crayon.models = {} );
 
+// TODO: Comment the hell out of all of this
 crayon.models.Annotation = ( function () {
   var MIN_FRAGMENT_LENGTH = 10,
       MAX_TEXT_LENGTH = 400,

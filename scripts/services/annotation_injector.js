@@ -1,5 +1,6 @@
 crayon.services || ( crayon.services = {} );
 
+// TODO: Go through and comment the hell out of all of this
 crayon.services.AnnotationInjector = ( function () {
 
   function AnnotationInjector ( annotation, viewClass ) {
@@ -73,7 +74,7 @@ crayon.services.AnnotationInjector = ( function () {
     var node = baseNodes[baseNodes.indexOf( candidates[candidates.length - 1].node ) + 1];
     if ( !node ) return null;
 
-    if ( (currentStr + node.textContent).trim().length < matchStr.length )
+    if ( (currentStr + node.textContent).trim().length < matchStr.length ) {
       return this._getNodeSet(
         candidates.concat(
           [{
@@ -86,6 +87,7 @@ crayon.services.AnnotationInjector = ( function () {
         matchStr,
         currentStr += node.textContent
       );
+    }
 
     if ( (currentStr + node.textContent).trim().match(this._nodeCheckRegex( matchStr )) ) {
       candidates.push({

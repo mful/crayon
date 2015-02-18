@@ -39,6 +39,8 @@ crayon.views.AnnotatedTextView = ( function () {
       this.elements[i].parentElement.replaceChild( frag, this.elements[i] );
     }
 
+    this.elements = [];
+
     return this;
   };
 
