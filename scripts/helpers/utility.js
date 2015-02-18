@@ -69,9 +69,28 @@ crayon.helpers.utility = {};
 
   namespace.isContained = function ( parent, child ) {
     var childRegex;
+    parent = namespace.normalizeWhitespace( parent );
+    child = namespace.normalizeWhitespace( child );
+    // must set childRegex after normalizing child
     childRegex = crayon.helpers.utility.escapedRegex( child.trim() );
 
     return !!parent.trim().match( childRegex );
+  };
+
+  namespace.isSentenceContained = function ( parent, child ) {
+    var childRegex;
+    parent = namespace.normalizeWhitespace( parent ).trim();
+    child = namespace.normalizeWhitespace( child );
+
+    if ( child.match(/[.?!\f\n\r\v]\s*$/) ) {
+      childRegex = crayon.helpers.utility.escapedRegex( child.trim() );
+    } else {
+      childRegex = new RegExp(
+        namespace.regexEscape( child.trim() ) + '.*[.?!\f\n\r\v]'
+      )
+    }
+
+    return !!parent.match( childRegex ) && !!parent.match(/^[A-Z\d\$\(]/);
   };
 
   // NOTE: remove if underscore.js ends up added
@@ -87,6 +106,10 @@ crayon.helpers.utility = {};
     }
 
     return merged;
+  };
+
+  namespace.normalizeWhitespace = function ( text ) {
+    return text.split(/\s+/).join(' ');
   };
 
   namespace.regexEscape = function ( string ) {

@@ -66,6 +66,7 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
     if ( this.activeView && !this.activeView.model.attributes.id ) {
       viewIndex = this.views.indexOf( this.activeView );
       this.activeView.remove();
+      this.activeView = null;
       this.views.slice( viewIndex, viewIndex + 1 );
     }
   };

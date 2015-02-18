@@ -19,7 +19,6 @@
     }
   ],
 
-  // TODO: update to match heroku HTTPS
   "sandbox" : {
     "pages" : [
       "http://scribble.dev:3000/*",

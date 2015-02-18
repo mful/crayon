@@ -11,7 +11,7 @@ describe( 'crayon.helpers.selection', function () {
       var _this = this;
 
       this.expectedNode = {
-        textContent: 'If we look deep in our history and our doctrine, rememember: We are not descended from fearul men.'
+        textContent: 'If we look deep in our history and our doctrine, rememember: We are not descended from fearful men.'
       };
 
       this.selection = {
@@ -54,7 +54,7 @@ describe( 'crayon.helpers.selection', function () {
       describe( 'and the last sentence is a valid sentence', function () {
         it( 'should return true', function () {
           var parent = "This is a parent text node. This node does not end in a footnote widget.";
-          var selection = "is a parent text node. This node ends in a footnote"
+          var selection = "is a parent text node. This node does not end in a footnote"
 
           expect( this.helper.isSuitableParent(parent, selection) ).toEqual( true );
         });
@@ -63,7 +63,7 @@ describe( 'crayon.helpers.selection', function () {
       describe( 'and the last sentence is not a valid sentence', function () {
         it( 'should return true', function () {
           var parent = "This is a parent text node. This node does not end in a footnote wid";
-          var selection = "is a parent text node. This node ends in a footnote"
+          var selection = "is a parent text node. This node does not end in a footnote"
 
           expect( this.helper.isSuitableParent(parent, selection) ).toEqual( false );
         });

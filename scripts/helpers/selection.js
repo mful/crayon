@@ -15,21 +15,11 @@ crayon.helpers.selection = {};
   };
 
   namespace.isSuitableParent = function ( parentText, selectionText ) {
-    var selectSents, parentSents;
-    selectsSents = crayon.helpers.utility.separateSentences( selectionText );
-    parentSents = crayon.helpers.utility.separateSentences( parentText );
-    parentSents.splice( parentSents.length - 1, 1 );
-
     return(
-      // In conjunction with the parentSents.splice call above, this prevents
-      // climbing up the DOM tree after selection sentences are fully
-      // encapsulated in the given node, when the given node does not end in a
-      // a recognized sentence. Ex: node ends in a footnote widget.
-      crayon.helpers.utility.isContained(
-        parentSents.join(''),
-        selectsSents[selectsSents.length - 1]
-      ) ||
-      crayon.helpers.selection.isSentenceCompliant( parentText )
+      crayon.helpers.utility.isSentenceContained(
+        parentText,
+        selectionText
+      )
     );
   };
 

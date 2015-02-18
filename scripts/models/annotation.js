@@ -2,7 +2,8 @@ crayon.models || ( crayon.models = {} );
 
 crayon.models.Annotation = ( function () {
   var MIN_FRAGMENT_LENGTH = 10,
-      MAX_TEXT_LENGTH = 400;
+      MAX_TEXT_LENGTH = 400,
+      MIN_TEXT_LENGTH = 5;
 
   Annotation.createFromSelection = function ( selection ) {
     var annotation = new Annotation();
@@ -70,17 +71,26 @@ crayon.models.Annotation = ( function () {
   };
 
   Annotation.prototype.validate = function () {
-    var overage = this.attributes.text.length - MAX_TEXT_LENGTH;
+    var diff;
 
     if ( this.attributes.text.length > MAX_TEXT_LENGTH ) {
+      diff = this.attributes.text.length - MAX_TEXT_LENGTH;
+
       this.errors.push(
-        "The highlighted text is " + overage + " characters too long.\n\n" +
+        "The highlighted text is " + diff + " characters too long.\n\n" +
         "To avoid annotations that are only different by a couple words, " +
         "annotations are limited to full sentences (don't worry -- Scribble " +
         "automatically expands the highlighted text to full sentences). After " +
-        "expanding to full sentences, the selected text was " + overage + " " +
+        "expanding to full sentences, the selected text was " + diff + " " +
         "characters over the " + MAX_TEXT_LENGTH + " character limit."
-      )
+      );
+    } else if ( this.attributes.text.length < MIN_TEXT_LENGTH ) {
+      diff = MIN_TEXT_LENGTH - this.attributes.text.length;
+
+      this.errors.push(
+        "The highlighted text is " + diff + " characters too short.\n\n" +
+        "Please select at least " + MIN_TEXT_LENGTH + "characters to annotate."
+      );
     }
   };
 

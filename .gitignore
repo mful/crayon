@@ -2,6 +2,7 @@
 *\.DS*
 *.crx
 *.pem
+*.zip
 
 /node_modules
 /_SpecRunner.html

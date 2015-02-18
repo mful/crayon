@@ -6,6 +6,9 @@ describe( 'crayon.views.AddAnnotationView', function () {
 
     this.selection = {
       rangeCount: 1,
+      toString: function () {
+        return 'not descended from fearful';
+      },
       getRangeAt: function ( i ){
         return {
           commonAncestorContainer: { textContent: ' We are not descended from fearful men.   ' }
