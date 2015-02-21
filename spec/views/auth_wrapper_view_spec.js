@@ -17,7 +17,7 @@ describe( 'crayon.views.AuthWrapperView', function () {
     });
 
     it( 'should set the iframe url to the signup path, with the expected param', function () {
-      var url = 'http://scribble.test/signup?referring_action=vote'
+      var url = 'http://scribble.test:31234/signup?referring_action=vote'
       expect( this.view.iframe.src ).toEqual( url );
     });
 

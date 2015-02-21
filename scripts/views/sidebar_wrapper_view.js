@@ -56,7 +56,7 @@ crayon.views.SidebarWrapperView = ( function () {
     wrapper.id = SidebarWrapperView.prototype.id;
     wrapper.className = SidebarWrapperView.prototype.className;
 
-    innerHTML = "<iframe></iframe><div class=\"crayon-close-sidebar\"><i class=\"ion-android-close\"></i></div>";
+    innerHTML = "<iframe id=\"crayon-sidebar\"></iframe><div class=\"crayon-close-sidebar\"><i class=\"ion-android-close\"></i></div>";
 
     wrapper.innerHTML = innerHTML;
 

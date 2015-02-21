@@ -46,7 +46,7 @@ crayon.views.AuthWrapperView = ( function () {
     wrapper.id = AuthWrapperView.prototype.id;
     wrapper.className = AuthWrapperView.prototype.className;
 
-    innerHTML = "<iframe onload=\"this.style.visibility='visible';\"></iframe>";
+    innerHTML = "<iframe id=\"crayon-auth-wrapper-frame\" onload=\"this.style.visibility='visible';\"></iframe>";
 
     wrapper.innerHTML = innerHTML;
 

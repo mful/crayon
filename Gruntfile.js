@@ -58,6 +58,11 @@ module.exports = function(grunt){
         src: [ 'manifest.json' ],
         dest: 'build',
         expand: true
+      },
+
+      manifestDev: {
+        src: 'manifest_dev.json',
+        dest: 'build/manifest.json'
       }
     },
 
@@ -142,7 +147,7 @@ module.exports = function(grunt){
   grunt.registerTask(
     'devBuild',
     'Compiles all of the assets and copies the files to the build directory, without minifying',
-    ['clean:build', 'stylesheets', 'devScripts', 'copy:images', 'copy:html', 'copy:fonts', 'copy:manifest']
+    ['clean:build', 'stylesheets', 'devScripts', 'copy:images', 'copy:html', 'copy:fonts', 'copy:manifestDev']
   );
 
   grunt.registerTask(

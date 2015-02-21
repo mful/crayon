@@ -59,7 +59,7 @@ describe( 'crayon.mediators.Courier', function () {
 
       beforeEach( function () {
         var event = {
-          origin: 'http://scribble.test',
+          origin: 'http://scribble.test:31234',
           data: "!_{h:''}"
         }
 
@@ -77,7 +77,7 @@ describe( 'crayon.mediators.Courier', function () {
         this.data = { message: 'login_success', data: {currentUser: {username: 'hagrid'}} };
 
         var event = {
-          origin: 'http://scribble.test',
+          origin: 'http://scribble.test:31234',
           data: JSON.stringify( this.data )
         }
 

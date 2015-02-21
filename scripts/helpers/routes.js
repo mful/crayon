@@ -57,7 +57,7 @@ crayon.helpers.routes = {};
         _urlRoot = 'http://scribble.dev:3000';
       } else {
         // for testing
-        _urlRoot = 'http://scribble.test';
+        _urlRoot = 'http://scribble.test:31234';
       }
     }
 

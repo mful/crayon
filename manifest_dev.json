@@ -1,0 +1,37 @@
+{
+  "manifest_version": 2,
+
+  "name": "ScribbleDev",
+  "description": "Annotate the internet.",
+  "version": "1.0.1",
+
+  "icons": {
+    "16": "images/s16.png",
+    "48": "images/s48.png",
+    "128": "images/s128.png"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["scripts/scribble.js"],
+      "css": ["styles/scribble.css"]
+    }
+  ],
+
+  "sandbox" : {
+    "pages" : [
+      "http://scribble.dev:3000/*",
+      "http://scribble.ly/*",
+      "https://scribble.ly/*"
+    ]
+  },
+
+  "web_accessible_resources": [
+    "fonts/*.woff2",
+    "fonts/*.woff",
+    "fonts/*.ttf",
+    "fonts/*.svg",
+    "fonts/*.eot"
+  ]
+}
