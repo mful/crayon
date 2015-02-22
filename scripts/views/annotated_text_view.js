@@ -52,6 +52,7 @@ crayon.views.AnnotatedTextView = ( function () {
     return this;
   };
 
+  // TODO: remove this?
   AnnotatedTextView.prototype.getBounds = function () {
     return this._boundingCoordinates( this.elements );
   };
@@ -87,6 +88,7 @@ crayon.views.AnnotatedTextView = ( function () {
 
   // private
 
+  // Remove this?
   AnnotatedTextView.prototype._boundingCoordinates = function ( elements ) {
     // get top and bottom (max and min) y-coords, and left/right (max-min)
     // x-coords. Then compare to first element, to figure out css for injected
@@ -120,17 +122,22 @@ crayon.views.AnnotatedTextView = ( function () {
 
     if ( first && last ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( "([.!?]\\s+|^\\s+|^)(" + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + ")(\\s|$)" ),
+        new RegExp(
+          "([.!?]\\s+|^\\s+|^)(" +
+          crayon.helpers.utility.regexEscape(nodeData.matchStr.trim(), {normalizeWhitespace: true}) +
+          ")(\\s|$)"
+        )
+      ,
         '$1' + openTag + '$2</span>$3'
       );
     } else if ( first ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + '.*' ),
+        new RegExp( crayon.helpers.utility.regexEscape(nodeData.matchStr.trim(), {normalizeWhitespace: true}) + '.*' ),
         openTag + '$&</span>'
       );
     } else if ( last ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( '.*' + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) ),
+        new RegExp( '.*' + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim(), {normalizeWhitespace: true}) ),
         openTag + '$&</span>'
       );
     } else {

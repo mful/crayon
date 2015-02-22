@@ -223,6 +223,14 @@ describe( 'crayon.helpers.utility', function () {
       var expectedResult = "This is\\-\\/\\(the\\)\\\\ story of a \\^\\$\\*girl \\+\\?\\.\\|\\[\\]\\{\\}";
       expect( this.helper.regexEscape(text) ).toEqual( expectedResult );
     });
+
+    describe( 'when normalizing whitespace', function () {
+      it( 'should escape all special chars and replace whitespace with generic matcher', function () {
+        var text = "This is-/(the)\\ story of a ^$*girl +?.|[]{}";
+        var expectedResult = "This\\s+is\\-\\/\\(the\\)\\\\\\s+story\\s+of\\s+a\\s+\\^\\$\\*girl\\s+\\+\\?\\.\\|\\[\\]\\{\\}";
+        expect( this.helper.regexEscape(text, {normalizeWhitespace: true}) ).toEqual( expectedResult );
+      })
+    });
   });
 
   describe( '#removeClass', function () {

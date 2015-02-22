@@ -63,7 +63,8 @@ crayon.services.AnnotationInjector = ( function () {
         i;
 
     for ( i = 0; i < this.baseNodes.length; i++ ) {
-      if ( !!this.baseNodes[i].textContent.match(matchRegex) ) results.push( this.baseNodes[i] );
+      if ( crayon.helpers.utility.isContained(this.baseNodes[i].textContent, text) )
+        results.push( this.baseNodes[i] );
     }
 
     return results;
@@ -71,7 +72,9 @@ crayon.services.AnnotationInjector = ( function () {
 
   // played with some functional concepts for this method and its helpers
   AnnotationInjector.prototype._getNodeSet = function ( candidates, baseNodes, matchStr, currentStr ) {
-    var node = baseNodes[baseNodes.indexOf( candidates[candidates.length - 1].node ) + 1];
+    var node = baseNodes[baseNodes.indexOf( candidates[candidates.length - 1].node ) + 1],
+        normalizedCandidate,
+        normalizedMatch;
     if ( !node ) return null;
 
     if ( (currentStr + node.textContent).trim().length < matchStr.length ) {
@@ -89,7 +92,10 @@ crayon.services.AnnotationInjector = ( function () {
       );
     }
 
-    if ( (currentStr + node.textContent).trim().match(this._nodeCheckRegex( matchStr )) ) {
+    normalizedCandidate =
+      crayon.helpers.utility.normalizeWhitespace( currentStr + node.textContent );
+    normalizedMatch = crayon.helpers.utility.normalizeWhitespace( matchStr );
+    if ( normalizedCandidate.trim().match(this._nodeCheckRegex( normalizedMatch )) ) {
       candidates.push({
         node: node,
         matchStr: this._lastMatchStr( candidates, matchStr )
@@ -144,9 +150,13 @@ crayon.services.AnnotationInjector = ( function () {
   // get nodes where the end section of textContent matches the testText.
   // We only assume this due the the check on leftovers.length in #inject, above.
   AnnotationInjector.prototype._pruneResults = function ( results, matchText ) {
+    var normalizedMatch = crayon.helpers.utility.normalizeWhitespace( matchText ),
+        normalizedText;
+
     return crayon.helpers.utility.filter( results, function ( res ) {
-      return !!res.textContent.trim().match(
-        crayon.helpers.utility.regexEscape( matchText.trim() ) + '$'
+      normalizedText = crayon.helpers.utility.normalizeWhitespace( res.textContent );
+      return !!normalizedText.trim().match(
+        crayon.helpers.utility.regexEscape( normalizedMatch.trim() ) + '$'
       );
     });
   }
