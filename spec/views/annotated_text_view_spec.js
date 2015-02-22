@@ -66,42 +66,6 @@ describe( 'crayon.views.AnnotatedTextView', function () {
     });
   });
 
-  describe( '#_boundingCoordinates', function () {
-
-    beforeEach( function () {
-      this.mockEl = document.createElement( 'div' );
-      this.wideDiv = document.createElement( 'div' );
-      this.tallDiv = document.createElement( 'div' );
-
-      this.wideDiv.style.height = '1px';
-      this.wideDiv.style.width  = '100%';
-      this.tallDiv.style.height = '100%';
-      this.tallDiv.style.width  = '1px';
-
-      this.mockEl.appendChild( this.wideDiv );
-      this.mockEl.appendChild( this.tallDiv );
-
-      document.body.appendChild( this.mockEl );
-    });
-
-    afterEach( function () {
-      document.body.removeChild( this.mockEl );
-    });
-
-    it( 'should return the bounding rectangle of the elements', function () {
-      var wideRect = this.wideDiv.getBoundingClientRect();
-      var tallRect = this.tallDiv.getBoundingClientRect();
-      var expectedRes = {
-        left: wideRect.left,
-        right: wideRect.right,
-        top: tallRect.top,
-        bottom: tallRect.bottom
-      }
-
-      expect( this.view._boundingCoordinates([this.wideDiv, this.tallDiv]) );
-    });
-  });
-
   describe( '#_createModifiedNode', function () {
 
     describe( 'when there is only one node in the set', function () {

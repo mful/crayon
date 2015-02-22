@@ -52,11 +52,6 @@ crayon.views.AnnotatedTextView = ( function () {
     return this;
   };
 
-  // TODO: remove this?
-  AnnotatedTextView.prototype.getBounds = function () {
-    return this._boundingCoordinates( this.elements );
-  };
-
   AnnotatedTextView.prototype.setActive = function ( active ) {
     if ( this.active === active ) return;
     var i,
@@ -87,31 +82,6 @@ crayon.views.AnnotatedTextView = ( function () {
   };
 
   // private
-
-  // Remove this?
-  AnnotatedTextView.prototype._boundingCoordinates = function ( elements ) {
-    // get top and bottom (max and min) y-coords, and left/right (max-min)
-    // x-coords. Then compare to first element, to figure out css for injected
-    // frame wrapper, to sit properly both above and below the text in question
-    var rectangles, xmin, xmax, ymin, ymax;
-    rectangles = elements.map( function ( el ) {
-      return el.getBoundingClientRect();
-    });
-
-    for ( var i = 0; i < rectangles.length; i++ ) {
-      if ( !xmin || rectangles[i].left < xmin ) xmin = rectangles[i].left;
-      if ( !xmax || rectangles[i].right > xmax ) xmax = rectangles[i].right;
-      if ( !ymin || rectangles[i].top < ymin ) ymin = rectangles[i].top;
-      if ( !ymax || rectangles[i].bottom > ymax ) ymax = rectangles[i].bottom;
-    }
-
-    return {
-      left: xmin,
-      right: xmax,
-      top: ymin,
-      bottom: ymax
-    }
-  };
 
   // TODO: add test for when first && last, and node follows closing node, but does not start with punctuation
   AnnotatedTextView.prototype._createModifiedNode = function ( nodeData, first, last ) {
