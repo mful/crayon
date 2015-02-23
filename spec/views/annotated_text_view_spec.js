@@ -34,6 +34,10 @@ describe( 'crayon.views.AnnotatedTextView', function () {
     this.view = new crayon.views.AnnotatedTextView( this.annotation, this.nodes );
   });
 
+  afterEach( function () {
+    document.body.removeChild( this.html );
+  });
+
   describe( '#setActive', function () {
 
     beforeEach( function () {
@@ -59,42 +63,6 @@ describe( 'crayon.views.AnnotatedTextView', function () {
         this.view.setActive( false );
         expect( crayon.helpers.utility.removeClass.calls.count() ).toEqual( this.nodes.length );
       });
-    });
-  });
-
-  describe( '#_boundingCoordinates', function () {
-
-    beforeEach( function () {
-      this.mockEl = document.createElement( 'div' );
-      this.wideDiv = document.createElement( 'div' );
-      this.tallDiv = document.createElement( 'div' );
-
-      this.wideDiv.style.height = '1px';
-      this.wideDiv.style.width  = '100%';
-      this.tallDiv.style.height = '100%';
-      this.tallDiv.style.width  = '1px';
-
-      this.mockEl.appendChild( this.wideDiv );
-      this.mockEl.appendChild( this.tallDiv );
-
-      document.body.appendChild( this.mockEl );
-    });
-
-    afterEach( function () {
-      document.body.removeChild( this.mockEl );
-    });
-
-    it( 'should return the bounding rectangle of the elements', function () {
-      var wideRect = this.wideDiv.getBoundingClientRect();
-      var tallRect = this.tallDiv.getBoundingClientRect();
-      var expectedRes = {
-        left: wideRect.left,
-        right: wideRect.right,
-        top: tallRect.top,
-        bottom: tallRect.bottom
-      }
-
-      expect( this.view._boundingCoordinates([this.wideDiv, this.tallDiv]) );
     });
   });
 
@@ -124,7 +92,7 @@ describe( 'crayon.views.AnnotatedTextView', function () {
         expect( res.childNodes.length ).toEqual(2);
         expect( res.childNodes[0].nodeType ).toEqual( 3 );
         expect( res.childNodes[1].nodeType ).toEqual( 1 );
-        expect( res.childNodes[1].textContent ).toEqual( 'Anderson hashtag typewriter' );
+        expect( res.childNodes[1].textContent ).toMatch( /^Anderson\n hashtag \stypewriter$/ );
       })
     });
 
@@ -138,7 +106,7 @@ describe( 'crayon.views.AnnotatedTextView', function () {
         expect( res.childNodes.length ).toEqual(2);
         expect( res.childNodes[0].nodeType ).toEqual( 1 );
         expect( res.childNodes[1].nodeType ).toEqual( 3 );
-        expect( res.childNodes[0].textContent ).toEqual( 'Wes Anderson hashtag' );
+        expect( res.childNodes[0].textContent ).toMatch( /^Wes Anderson\n hashtag$/ );
       })
     });
 
@@ -151,7 +119,7 @@ describe( 'crayon.views.AnnotatedTextView', function () {
         res = this.view._createModifiedNode(nodeData, false, false);
         expect( res.childNodes.length ).toEqual(1);
         expect( res.childNodes[0].nodeType ).toEqual( 1 );
-        expect( res.childNodes[0].textContent ).toEqual( 'Wes Anderson hashtag typewriter' );
+        expect( res.childNodes[0].textContent ).toMatch( /^Wes Anderson\n hashtag \stypewriter$/ );
       })
     });
   });
@@ -160,7 +128,7 @@ describe( 'crayon.views.AnnotatedTextView', function () {
     var element = document.createElement( 'div' );
     element.innerHTML = "Roof party deep v biodiesel meditation polaroid. " +
       "<h2>Lomo Blue Bottle gluten-free</h2>" +
-      "<a>Wes Anderson hashtag typewriter</a>" +
+      "<a>Wes Anderson\n hashtag &nbsp;typewriter</a>" +
       ", <span>synth <strong>McSweeney's</strong> viral kitsch</span>." +
       "<p id='split-p'>Ennui craft beer <a>flexitarian stumptown. Scenester Williamsburg letterpress.</a> </p>" +
       "<p>Keffiyeh umami fixie, DIY literally heirloom you probably haven't heard of them.</p>" +

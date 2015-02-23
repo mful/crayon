@@ -294,7 +294,7 @@ describe( 'crayon.services.AnnotationInjector', function () {
     var element = document.createElement( 'div' );
     element.innerHTML = "Roof party deep v biodiesel meditation polaroid. " +
       "<h2>Lomo Blue Bottle gluten-free</h2>" +
-      "<a>Wes Anderson hashtag typewriter</a>" +
+      "<a>Wes Anderson\n hashtag &nbsp;typewriter</a>" +
       ", <span>synth <strong>McSweeney's</strong> viral kitsch</span>." +
       "<p id='split-p'>Ennui craft beer <a>flexitarian stumptown. Scenester Williamsburg letterpress.</a> </p>" +
       "<p>Keffiyeh umami fixie, DIY literally heirloom you probably haven't heard of them.</p>" +

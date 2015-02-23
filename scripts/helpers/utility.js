@@ -112,8 +112,14 @@ crayon.helpers.utility = {};
     return text.split(/\s+/).join(' ');
   };
 
-  namespace.regexEscape = function ( string ) {
-    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  namespace.regexEscape = function ( string, options ) {
+    options || ( options = {} );
+    string = string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    if ( options.normalizeWhitespace )
+      string = string.replace( /\s+/g, '\\s+' )
+
+    return string;
   };
 
   namespace.removeClass = function ( element, cssClass ) {

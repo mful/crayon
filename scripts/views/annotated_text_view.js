@@ -52,10 +52,6 @@ crayon.views.AnnotatedTextView = ( function () {
     return this;
   };
 
-  AnnotatedTextView.prototype.getBounds = function () {
-    return this._boundingCoordinates( this.elements );
-  };
-
   AnnotatedTextView.prototype.setActive = function ( active ) {
     if ( this.active === active ) return;
     var i,
@@ -87,30 +83,6 @@ crayon.views.AnnotatedTextView = ( function () {
 
   // private
 
-  AnnotatedTextView.prototype._boundingCoordinates = function ( elements ) {
-    // get top and bottom (max and min) y-coords, and left/right (max-min)
-    // x-coords. Then compare to first element, to figure out css for injected
-    // frame wrapper, to sit properly both above and below the text in question
-    var rectangles, xmin, xmax, ymin, ymax;
-    rectangles = elements.map( function ( el ) {
-      return el.getBoundingClientRect();
-    });
-
-    for ( var i = 0; i < rectangles.length; i++ ) {
-      if ( !xmin || rectangles[i].left < xmin ) xmin = rectangles[i].left;
-      if ( !xmax || rectangles[i].right > xmax ) xmax = rectangles[i].right;
-      if ( !ymin || rectangles[i].top < ymin ) ymin = rectangles[i].top;
-      if ( !ymax || rectangles[i].bottom > ymax ) ymax = rectangles[i].bottom;
-    }
-
-    return {
-      left: xmin,
-      right: xmax,
-      top: ymin,
-      bottom: ymax
-    }
-  };
-
   // TODO: add test for when first && last, and node follows closing node, but does not start with punctuation
   AnnotatedTextView.prototype._createModifiedNode = function ( nodeData, first, last ) {
     var div = document.createElement('div'),
@@ -120,17 +92,22 @@ crayon.views.AnnotatedTextView = ( function () {
 
     if ( first && last ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( "([.!?]\\s+|^\\s+|^)(" + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + ")(\\s|$)" ),
+        new RegExp(
+          "([.!?]\\s+|^\\s+|^)(" +
+          crayon.helpers.utility.regexEscape(nodeData.matchStr.trim(), {normalizeWhitespace: true}) +
+          ")(\\s|$)"
+        )
+      ,
         '$1' + openTag + '$2</span>$3'
       );
     } else if ( first ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) + '.*' ),
+        new RegExp( crayon.helpers.utility.regexEscape(nodeData.matchStr.trim(), {normalizeWhitespace: true}) + '.*' ),
         openTag + '$&</span>'
       );
     } else if ( last ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
-        new RegExp( '.*' + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim()) ),
+        new RegExp( '.*' + crayon.helpers.utility.regexEscape(nodeData.matchStr.trim(), {normalizeWhitespace: true}) ),
         openTag + '$&</span>'
       );
     } else {
