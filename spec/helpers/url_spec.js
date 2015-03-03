@@ -22,4 +22,21 @@ describe( 'crayon.helpers.url', function () {
       });
     });
   });
+
+  describe( '#queryObject', function () {
+
+    var location = { search: '?cryn_type=reply&id=123&show=true' };
+
+    beforeEach( function () {
+      spyOn( crayon.helpers.url, 'currentLocation' ).and.returnValue( location );
+    });
+
+    it( 'should return the query params, as an object, properly handling various data types', function () {
+      expect( crayon.helpers.url.queryObject() ).toEqual({
+        cryn_type: 'reply',
+        id: 123,
+        show: true
+      });
+    });
+  });
 });

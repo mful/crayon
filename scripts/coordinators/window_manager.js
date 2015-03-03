@@ -108,6 +108,14 @@ crayon.coordinators.WindowManager = ( function () {
     return this.windows.createWidget.render( annotation, pad );
   };
 
+  WindowManager.prototype.showReply = function ( params ) {
+    var url =
+          crayon.helpers.routes.comment_url( params.cryn_cid, { reply_id: params.cryn_id } ),
+        annotation = crayon.annotatedTextManager.getAnnotationById( params.cryn_aid )
+
+    return this.showSidebar( annotation, url );
+  };
+
   WindowManager.prototype.showSidebar = function ( annotation, url ) {
     if ( !this.windows.sidebar )
       this.windows.sidebar = new crayon.views.SidebarWrapperView();

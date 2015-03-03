@@ -11,7 +11,7 @@ crayon.dispatchers.Dispatcher = ( function () {
         _this.cancelAnnotation();
         break;
       case crayon.constants.AppConstants.READY:
-        _this.fetchPageAnnotations();
+        _this.initializePage();
         break;
       case crayon.constants.AnnotationConstants.NEW_ANNOTATION:
         _this.newAnnotation( payload.data );
@@ -30,6 +30,9 @@ crayon.dispatchers.Dispatcher = ( function () {
         break;
       case crayon.constants.CourierConstants.POST_CREATE_COMMENT:
         _this.notifyCreateComment( payload.data );
+        break;
+      case crayon.constants.NotificationConstants.REPLY_NOTIFICATION:
+        _this.handleReplyNotification( payload.data );
         break;
       case crayon.constants.SessionConstants.AUTH_NEEDED:
         _this.promptAuth( payload.data );
@@ -60,13 +63,17 @@ crayon.dispatchers.Dispatcher = ( function () {
     crayon.annotatedTextManager.removeActiveIfUnpersisted();
   };
 
-  Dispatcher.prototype.fetchPageAnnotations = function ( annotation ) {
-    return crayon.annotatedTextManager.showAllOnPage( crayon.helpers.url.currentHref() );
+  Dispatcher.prototype.initializePage = function ( annotation ) {
+    return new crayon.services.PageInitializer().go();
   };
 
   Dispatcher.prototype.handleCreateAnnotation = function ( annotation ) {
     var model = new crayon.models.Annotation( annotation );
     return crayon.windowManager.handleCreateAnnotation( model );
+  };
+
+  Dispatcher.prototype.handleReplyNotification = function ( params ) {
+    return crayon.windowManager.showReply( params );
   };
 
   Dispatcher.prototype.maybeClearHighlight = function () {

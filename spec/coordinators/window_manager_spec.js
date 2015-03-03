@@ -235,6 +235,64 @@ describe( 'crayon.coordinators.WindowManager', function () {
     });
   });
 
+  describe( '#showReply', function () {
+
+    var params ={
+          cryn_cid: 1,
+          cryn_id: 2,
+          cryn_aid: 3
+        },
+        expectedUrl = 'http://scribble.test:31234/comments/1?reply_id=2';
+
+    beforeEach( function () {
+      spyOn( this.coordinator, 'showSidebar' );
+      this.coordinator.showReply( params );
+    });
+
+    afterEach( function () {
+      this.coordinator.removeWindow( this.coordinator.windows.sidebar );
+    });
+
+    it( 'should render the sidebar, with the expected URL', function () {
+      expect( this.coordinator.showSidebar ).toHaveBeenCalledWith(
+        null,
+        expectedUrl
+      );
+    });
+  });
+
+  describe( '#showSidebar', function () {
+    var el = document.createElement( 'div' );
+        wrapperView = {
+          render: function () {},
+          element: el
+        },
+        url = 'http://scribble.test/comments/1?cryn_type=reply&cryn_id=2&cryn_aid=1&cryn_cid=1';
+
+    beforeEach( function () {
+      crayon.annotatedTextManager ||
+        ( crayon.annotatedTextManager = {activateAnnotation: function() {}} );
+
+      spyOn( crayon.annotatedTextManager, 'activateAnnotation' );
+      spyOn( crayon.views, 'SidebarWrapperView' ).and.returnValue( wrapperView );
+      spyOn( wrapperView, 'render' );
+
+      this.coordinator.showSidebar( {}, url )
+    });
+
+    it( 'should render the sidebar with', function () {
+      expect( wrapperView.render ).toHaveBeenCalledWith( url );
+    });
+
+    it( 'should bring the sidebar to the front', function () {
+      expect( !!wrapperView.element.className.match(/crayon-active-window/) ).toEqual( true );
+    });
+
+    it( 'should activate the given annotation', function () {
+      expect( crayon.annotatedTextManager.activateAnnotation ).toHaveBeenCalled();
+    });
+  });
+
   describe( '#setActive', function () {
 
     beforeEach( function () {

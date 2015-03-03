@@ -22,6 +22,13 @@ crayon.helpers.routes = {};
     return urlRoot() + '/annotations/' + id;
   };
 
+  namespace.comment_url = function ( id, params ) {
+    params || ( params = {} );
+
+    return urlRoot() + '/comments/' + id + '?' +
+      crayon.helpers.url.toQueryStr( params );
+  };
+
   namespace.new_annotation_comment_url = function ( id ) {
     return urlRoot() + '/annotations/' + id + '/comments/new'
   };
@@ -38,10 +45,6 @@ crayon.helpers.routes = {};
   // TODO: Add spec
   namespace.new_reply_url = function ( id ) {
     return urlRoot() + '/comments/' + id + '/replies/new'
-  };
-
-  namespace.replies_url = function ( id ) {
-    return urlRoot() + '/comments/' + id + '/replies';
   };
 
   namespace.signup_url = function ( params ) {

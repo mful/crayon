@@ -6,7 +6,7 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
     this.views = [];
   };
 
-  AnnotatedTextManager.prototype.showAllOnPage = function ( url ) {
+  AnnotatedTextManager.prototype.showAllOnPage = function ( url, callback ) {
     var _this = this;
 
     crayon.models.Annotation.fetchAllForPage(
@@ -17,9 +17,20 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
           _this.injectAnnotation( annotations[i] );
         }
 
+        if ( typeof callback === 'function' ) callback();
+
         return annotations;
       }
     )
+  };
+
+  AnnotatedTextManager.prototype.getAnnotationById = function ( id ) {
+    for ( var i = 0; i < this.views.length; i++ ) {
+      if ( this.views[i].model.attributes.id === id )
+        return this.views[i].model;
+    }
+
+    return null;
   };
 
   AnnotatedTextManager.prototype.injectAnnotation = function ( annotation ) {
@@ -39,7 +50,7 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
       }),
       i, isContained;
 
-    for ( var i = 0; i < currentAnnotations.length; i++ ) {
+    for ( i = 0; i < currentAnnotations.length; i++ ) {
       isContained = crayon.helpers.utility.isContained(
         annotation.attributes.text,
         currentAnnotations[i].attributes.text
@@ -64,6 +75,8 @@ crayon.coordinators.AnnotatedTextManager = ( function () {
         this.views[i].setActive( false );
       }
     }
+
+    if ( !!activeView ) activeView.elements[0].scrollIntoViewIfNeeded();
 
     return activeView;
   };
