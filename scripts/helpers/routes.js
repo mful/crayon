@@ -52,7 +52,7 @@ crayon.helpers.routes = {};
   var urlRoot = function () {
     if ( _urlRoot == null ) {
       if ( crayon.env === 'production' ) {
-        _urlRoot = 'https://scribblely.herokuapp.com';
+        _urlRoot = 'http://scribble-prod.elasticbeanstalk.com/';
       } else if ( crayon.env === 'development' ) {
         _urlRoot = 'http://scribble.dev:3000';
       } else {
