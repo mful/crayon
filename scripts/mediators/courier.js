@@ -9,6 +9,9 @@ crayon.mediators.Courier = ( function () {
 
   Courier.prototype.delegateEvents = function () {
     window.addEventListener( 'message', this.receivePackage, false );
+    if ( chrome && chrome.runtime ) {
+      chrome.runtime.onMessage.addListener( this.receiveExtensionMessage );
+    }
   };
 
   Courier.prototype.post = function ( contentWindow, message, data ) {
@@ -16,6 +19,16 @@ crayon.mediators.Courier = ( function () {
       JSON.stringify({ message: message, data: data }),
       '*'
     );
+  };
+
+  Courier.prototype.receiveExtensionMessage = function ( message, sender, callback ) {
+    var payload = JSON.parse( message );
+    payload.data || ( payload.data = {} );
+
+    payload.data.sender = sender;
+    payload.data.callback = callback;
+
+    crayon.dispatcher.dispatch( payload );
   };
 
   Courier.prototype.receivePackage = function ( event ) {

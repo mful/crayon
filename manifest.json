@@ -5,6 +5,11 @@
   "description": "Annotate the internet.",
   "version": "1.0.1",
 
+  "browser_action" : {
+    "default_icon": "images/s48.png",
+    "default_popup": "html/popup.html"
+  },
+
   "icons": {
     "16": "images/s16.png",
     "48": "images/s48.png",

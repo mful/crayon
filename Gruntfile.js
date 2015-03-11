@@ -5,8 +5,13 @@ module.exports = function(grunt){
 
     concat: {
       scripts: {
-        src: ['build/scripts/vendor/**/*.js', 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/background/**/*.js'],
+        src: ['build/scripts/vendor/**/*.js', 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/popup/**/*.js'],
         dest: 'build/scripts/scribble.js'
+      },
+
+      popupScripts: {
+        src: ['build/scripts/popup/popup.js', 'build/scripts/popup/**/*.js', 'build/scripts/helpers/**/*.js', 'build/scripts/constants/**/*.js'],
+        dest: 'build/scripts/popup.js'
       }
     },
 
@@ -74,7 +79,7 @@ module.exports = function(grunt){
         src: [ 'build/**/*.css', '!build/styles/scribble.css' ]
       },
       scripts: {
-        src: [ 'build/**/*.js', '!build/scripts/scribble.js' ]
+        src: [ 'build/**/*.js', '!build/scripts/scribble.js', '!build/scripts/popup.js' ]
       },
     },
 
@@ -101,8 +106,8 @@ module.exports = function(grunt){
     uglify: {
       build: {
         files: {
-          'build/scripts/scribble.js': [ 'build/scripts/prod_init.js', 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/background/**/*.js' ],
-          'build/scripts/background.js': [ 'build/scripts/background/**/*.js' ]
+          'build/scripts/scribble.js': [ 'build/scripts/prod_init.js', 'build/scripts/crayon.js', 'build/scripts/**/*.js', '!build/scripts/popup/**/*.js' ],
+          'build/scripts/popup.js': [ 'build/scripts/popup/popup.js', 'build/scripts/popup/**/*.js', 'build/scripts/helpers/**/*.js', 'build/scripts/helpers/**/*.js' ]
         }
       }
     },
@@ -135,7 +140,7 @@ module.exports = function(grunt){
   grunt.registerTask(
     'devScripts',
     'Concats JS files together',
-    ['copy:vendorScripts', 'copy:scripts', 'concat:scripts', 'clean:scripts']
+    ['copy:vendorScripts', 'copy:scripts', 'concat:scripts', 'concat:popupScripts', 'clean:scripts']
   );
 
   grunt.registerTask(
