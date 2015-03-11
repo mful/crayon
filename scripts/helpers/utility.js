@@ -31,7 +31,7 @@ crayon.helpers.utility = {};
       timer = setTimeout( func, delay );
       return timer;
     };
-  }
+  };
 
   namespace.escapedRegex = function ( string ) {
     return new RegExp( namespace.regexEscape(string) );

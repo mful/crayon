@@ -47,6 +47,10 @@ crayon.helpers.routes = {};
     return urlRoot() + '/comments/' + id + '/replies/new'
   };
 
+  namespace.notifications_url = function () {
+    return urlRoot() + '/notifications';
+  };
+
   namespace.signup_url = function ( params ) {
     params || ( params = {} );
     return urlRoot() + '/signup?' + crayon.helpers.url.toQueryStr( params );

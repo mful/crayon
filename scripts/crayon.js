@@ -11,10 +11,6 @@ crayon.observers || ( crayon.observers = {} );
 crayon.mediators || ( crayon.mediators = {} );
 
 crayon.init = function () {
-  // TODO: remove this constraint
-  var articleTag = document.querySelector('meta[property="og:type"]');
-  if ( !articleTag || (articleTag.content !== 'article' && articleTag.content !== 'blog') ) return;
-
   crayon.annotatedTextManager = new crayon.coordinators.AnnotatedTextManager();
   crayon.windowManager = new crayon.coordinators.WindowManager();
   crayon.dispatcher = new crayon.dispatchers.Dispatcher();
