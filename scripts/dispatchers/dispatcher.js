@@ -31,6 +31,9 @@ crayon.dispatchers.Dispatcher = ( function () {
       case crayon.constants.CourierConstants.POST_CREATE_COMMENT:
         _this.notifyCreateComment( payload.data );
         break;
+      case crayon.constants.NotificationConstants.COMMENT_NOTIFICATION:
+        _this.handleCommentNotification( payload.data );
+        break;
       case crayon.constants.NotificationConstants.REPLY_NOTIFICATION:
         _this.handleReplyNotification( payload.data );
         break;
@@ -70,6 +73,14 @@ crayon.dispatchers.Dispatcher = ( function () {
   Dispatcher.prototype.handleCreateAnnotation = function ( annotation ) {
     var model = new crayon.models.Annotation( annotation );
     return crayon.windowManager.handleCreateAnnotation( model );
+  };
+
+  Dispatcher.prototype.handleCommentNotification = function ( params ) {
+    var annotation = crayon.annotatedTextManager.getAnnotationById( params.cryn_aid );
+    return crayon.windowManager.showSidebar(
+      annotation,
+      crayon.helpers.routes.annotation_url( annotation.attributes.id )
+    );
   };
 
   Dispatcher.prototype.handleReplyNotification = function ( params ) {
