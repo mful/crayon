@@ -1,5 +1,5 @@
 window.popup = {};
-window.crayon = {};
+window.crayon || ( window.crayon = {} );
 
 popup.mediators || ( popup.mediators = {} );
 crayon.helpers = {};
