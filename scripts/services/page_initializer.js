@@ -11,10 +11,19 @@ crayon.services.PageInitializer = ( function () {
       crayon.helpers.url.currentHref(),
       this.handlePotentialNotification
     );
+
+    this.alertPageLoad();
   };
 
   PageInitializer.prototype.handlePotentialNotification = function () {
     new crayon.services.QueryParamParser().handleParams();
+  };
+
+  PageInitializer.prototype.alertPageLoad = function () {
+    crayon.courier.longDistance(
+      crayon.constants.AppConstants.PAGE_LOAD,
+      {}
+    );
   };
 
   return PageInitializer;

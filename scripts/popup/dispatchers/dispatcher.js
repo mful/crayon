@@ -8,14 +8,21 @@ popup.dispatchers.Dispatcher = ( function () {
 
     switch( payload.message ) {
       case crayon.constants.SessionConstants.AUTH_NEEDED:
-        _this.relayMessage( payload );
+        _this.relayToCrayon( payload );
+        break;
+      case crayon.constants.NotificationConstants.NOTIFICATIONS_CHANGE:
+        _this.relayToBackground( payload );
         break;
     }
 
     return true;
   };
 
-  Dispatcher.prototype.relayMessage = function ( payload ) {
+  Dispatcher.prototype.relayToBackground = function ( payload ) {
+    popup.courier.longDistance( payload.message, payload.data );
+  };
+
+  Dispatcher.prototype.relayToCrayon = function ( payload ) {
     popup.courier.post( payload, function () {}, {closePopup: true} );
   };
 

@@ -5,9 +5,15 @@
   "description": "Annotate the internet.",
   "version": "1.0.1",
 
+  "background": {
+    "scripts": ["scripts/background.js"],
+    "persistent": false
+  },
+
   "browser_action" : {
     "default_icon": "images/s48.png",
-    "default_popup": "html/popup.html"
+    "default_popup": "html/popup.html",
+    "default_title": "Scribble"
   },
 
   "icons": {

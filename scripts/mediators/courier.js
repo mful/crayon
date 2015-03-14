@@ -4,6 +4,7 @@ crayon.mediators.Courier = ( function () {
 
   function Courier  () {
     this.receivePackage = this.receivePackage.bind( this );
+    this.receiveExtensionMessage = this.receiveExtensionMessage.bind( this );
     this.delegateEvents();
   };
 
@@ -14,21 +15,34 @@ crayon.mediators.Courier = ( function () {
     }
   };
 
-  Courier.prototype.post = function ( contentWindow, message, data ) {
+  Courier.prototype.post = function ( contentWindow, message, data, options ) {
     contentWindow.postMessage(
       JSON.stringify({ message: message, data: data }),
       '*'
     );
   };
 
-  Courier.prototype.receiveExtensionMessage = function ( message, sender, callback ) {
-    var payload = JSON.parse( message );
-    payload.data || ( payload.data = {} );
+  Courier.prototype.longDistance = function ( message, data, options ) {
+    options || ( options = {} );
 
-    payload.data.sender = sender;
-    payload.data.callback = callback;
+    chrome.runtime.sendMessage(
+      {
+        message: message,
+        data: data,
+      }
+    ,
+      options.callback
+    )
+  };
 
-    crayon.dispatcher.dispatch( payload );
+  Courier.prototype.receiveExtensionMessage = function ( data, sender, callback ) {
+    data.sender = sender;
+    data.callback = callback;
+
+    crayon.dispatcher.dispatch({
+      message: data.message,
+      data: data.data
+    });
   };
 
   Courier.prototype.receivePackage = function ( event ) {

@@ -11,6 +11,10 @@ crayon.helpers.routes = {};
 
   // api
 
+  namespace.api_notification_count_url = function () {
+    return urlRoot() + '/api/notifications/current_count';
+  };
+
   namespace.api_page_annotations_url = function ( url ) {
     return urlRoot() + '/api/annotations/by_page?' +
       crayon.helpers.url.toQueryStr({ url: url });
@@ -40,7 +44,6 @@ crayon.helpers.routes = {};
     return urlRoot() + '/annotations/new?' +
       crayon.helpers.url.toQueryStr( params );
   };
-
 
   // TODO: Add spec
   namespace.new_reply_url = function ( id ) {

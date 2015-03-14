@@ -3,18 +3,12 @@ popup.mediators || ( popup.mediators = {} );
 popup.mediators.PopupCourier = ( function () {
 
   function PopupCourier () {
-
-    console.log( chrome.tabs );
-
     this.receivePackage = this.receivePackage.bind( this );
     this.delegateEvents();
   };
 
   PopupCourier.prototype.delegateEvents = function () {
     window.parent.addEventListener( 'message', this.receivePackage, false );
-    if ( chrome && chrome.runtime ) {
-      chrome.runtime.onMessage.addListener( this.receiveExtensionMessage );
-    }
   };
 
   PopupCourier.prototype.post = function ( data, callback, options ) {
@@ -22,18 +16,24 @@ popup.mediators.PopupCourier = ( function () {
 
     chrome.tabs.query( {active: true}, function ( tabs ) {
       for ( var tab in tabs ) {
-        chrome.tabs.sendMessage( tabs[tab].id, JSON.stringify( data ), callback );
+        chrome.tabs.sendMessage( tabs[tab].id, data, callback );
       }
     });
 
     if ( options.closePopup ) window.close();
   };
 
-  PopupCourier.prototype.receiveExtensionMessage = function ( message, sender, callback ) {
-    popup.dispatcher.dispatch({
-      message: message,
-      data: {sender: sender, callback: callback}
-    });
+  PopupCourier.prototype.longDistance = function ( message, data, options ) {
+    options || ( options = {} );
+
+    chrome.runtime.sendMessage(
+      {
+        message: message,
+        data: data,
+      }
+    ,
+      options.callback
+    );
   };
 
   PopupCourier.prototype.receivePackage = function ( event ) {
