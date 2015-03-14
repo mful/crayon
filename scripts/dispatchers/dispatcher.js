@@ -67,6 +67,7 @@ crayon.dispatchers.Dispatcher = ( function () {
   };
 
   Dispatcher.prototype.initializePage = function ( annotation ) {
+    crayon.windowManager.showCreateWidget();
     return new crayon.services.PageInitializer().go();
   };
 

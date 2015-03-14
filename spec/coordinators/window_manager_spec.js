@@ -66,7 +66,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
       });
 
       it( 'should hide the view', function () {
-        expect( /(?:^|\s)hidden(?!\S)/.test( this.view.element.className ) ).toEqual( true )
+        expect( /(?:^|\s)active(?!\S)/.test( this.view.element.className ) ).toEqual( false )
       })
     });
 

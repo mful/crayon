@@ -56,7 +56,7 @@ describe( 'crayon.views.AddAnnotationView', function () {
     });
 
     it( 'should remove the hidden class from the widget', function () {
-      expect( !!this.view.element.className.match(/hidden/) ).toEqual( false );
+      expect( !!this.view.element.className.match(/active/) ).toEqual( true );
     });
   });
 
@@ -67,7 +67,7 @@ describe( 'crayon.views.AddAnnotationView', function () {
     });
 
     it( 'should add the hidden class to the widget', function () {
-      expect( !!this.view.element.className.match(/hidden/) ).toEqual( true );
+      expect( !!this.view.element.className.match(/active/) ).toEqual( false );
     });
   });
 });

@@ -37,6 +37,7 @@
     "fonts/*.woff",
     "fonts/*.ttf",
     "fonts/*.svg",
-    "fonts/*.eot"
+    "fonts/*.eot",
+    "images/*.svg"
   ]
 }

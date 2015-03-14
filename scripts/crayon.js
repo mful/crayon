@@ -11,6 +11,8 @@ crayon.observers || ( crayon.observers = {} );
 crayon.mediators || ( crayon.mediators = {} );
 
 crayon.init = function () {
+  if ( crayon.isBlacklisted() ) return;
+
   crayon.annotatedTextManager = new crayon.coordinators.AnnotatedTextManager();
   crayon.windowManager = new crayon.coordinators.WindowManager();
   crayon.dispatcher = new crayon.dispatchers.Dispatcher();
@@ -23,6 +25,18 @@ crayon.init = function () {
   });
 
   return this;
+};
+
+crayon.isBlacklisted = function () {
+  var blacklist = ["twitter.com", "facebook.", "docs.google.com", "mail.yahoo.", "mail.google.", "inbox.google", "tuenti.com"],
+      hostname = document.location.hostname;
+
+  for ( var i = 0; i < blacklist.length; i++ ) {
+    if ( hostname.match(crayon.helpers.utility.escapedRegex( blacklist[i] )) )
+      return true;
+  }
+
+  return false;
 };
 
 ( function () {

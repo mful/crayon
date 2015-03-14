@@ -1,4 +1,5 @@
 describe( 'crayon.mediators.Courier', function () {
+  chrome.runtime.onMessage = {addListener: function () {}}
 
   beforeEach( function () {
     this.mediator = new crayon.mediators.Courier()

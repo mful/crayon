@@ -88,7 +88,7 @@ crayon.views.AnnotatedTextView = ( function () {
     var div = document.createElement('div'),
         frag = document.createDocumentFragment(),
         openTag = '<span class="crayon-annotation-text-view" data-crayon-key="' +
-          this.model.cid + '">' ;
+          this.model.cid + '" data-annotation-id="' + ( this.model.attributes.id || '' ) + '">' ;
 
     if ( first && last ) {
       div.innerHTML = nodeData.node.nodeValue.replace(
