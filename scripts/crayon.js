@@ -28,7 +28,7 @@ crayon.init = function () {
 };
 
 crayon.isBlacklisted = function () {
-  var blacklist = ["twitter.com", "facebook.", "docs.google.com", "mail.yahoo.", "mail.google.", "inbox.google", "tuenti.com"],
+  var blacklist = ["twitter.com", "facebook.", "docs.google.com", "mail.yahoo.", "mail.google.", "inbox.google", "tuenti.com", "asana.com", "trello.com", "pivotaltracker.com"],
       hostname = document.location.hostname;
 
   for ( var i = 0; i < blacklist.length; i++ ) {

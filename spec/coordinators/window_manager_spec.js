@@ -116,6 +116,7 @@ describe( 'crayon.coordinators.WindowManager', function () {
       this.view = {remove: function () {}};
       this.coordinator.activeWindow = this.view;
       this.coordinator.windows.annotationBubble = this.view;
+      this.coordinator.windows.createWidget = {render: function () {}, model: {}}
 
       spyOn( this.view, 'remove' );
       spyOn( crayon.annotatedTextManager, 'deactivateAnnotations' );
