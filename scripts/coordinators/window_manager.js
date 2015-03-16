@@ -78,6 +78,7 @@ crayon.coordinators.WindowManager = ( function () {
 
     if ( !this.windows.sidebar ) {
       crayon.annotatedTextManager.deactivateAnnotations();
+      this.windows.createWidget.render( this.windows.createWidget.model );
     } else if ( !this.activeWindow ) {
       this.setActive( this.windows.sidebar );
     }

@@ -32,7 +32,7 @@ crayon.views.AddAnnotationView = ( function () {
 
     if ( !document.getElementById(this.id) ) {
       feedlyWidget = document.getElementById( 'feedly-mini' );
-      if ( feedlyWidget ) feedlyWidget.style.right = '45px';
+      if ( feedlyWidget ) feedlyWidget.style.right = '55px';
       document.body.appendChild( this.element );
     } else {
       this.show();
