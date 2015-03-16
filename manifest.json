@@ -3,7 +3,7 @@
 
   "name": "Scribble",
   "description": "Annotate the internet.",
-  "version": "1.0.1",
+  "version": "1.0.4",
 
   "background": {
     "scripts": ["scripts/background.js"],
